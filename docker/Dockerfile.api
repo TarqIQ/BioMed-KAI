@@ -1,0 +1,21 @@
+FROM python:3.11-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*
+
+# copy monorepo package + api
+COPY biomedkai /app/biomedkai
+COPY services/api /app/services/api
+COPY biomedkai/configs /app/biomedkai/configs
+COPY pyproject.toml /app/
+COPY services/api/pyproject.toml /app/services/api/pyproject.toml
+
+# install agentic core (editable) and api
+RUN pip install --no-cache-dir -e .
+RUN pip install --no-cache-dir -e ./services/api
+
+# optional: seed demo prompts for eval
+COPY experiments /app/experiments
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+CMD ["biomedkai-api"]

@@ -1,0 +1,32 @@
+runtime:
+  device: "cpu"
+  seed: 42
+
+llm:
+  provider: "llamacpp"
+  model_path: /path_to_models/models/Meta-Llama-3.1-8B-Instruct-Q8_0.gguf"
+  n_ctx: 8192
+  n_threads: 32
+  n_gpu_layers: 256
+  temperature: 0.2
+  top_p: 0.9
+  repeat_penalty: 1.1
+  chat_format: "llama-3"
+
+embeddings:
+  model: "sentence-transformers/all-MiniLM-L6-v2"
+
+kg:
+  uri: ${oc.env:KG_URI, bolt://localhost:7687}
+  user: ${oc.env:KG_USER, neo4j}
+  password: ${oc.env:KG_PASS, test}
+
+retrieval:
+  top_k: 25
+  alpha: 0.6
+  beta: 0.4
+
+routing:
+  policy: "rule"              # "rule" | "classifier" | "bandit"
+  classifier_type: "none"     # "none" | "sklearn" | "pytorch" | "onnx" | "python"
+  classifier_path: ""         # path to .joblib/.pt/.onnx/.py

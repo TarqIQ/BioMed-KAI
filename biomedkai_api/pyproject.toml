@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biomedkai-api"
+version = "0.1.0"
+dependencies = [
+  "fastapi>=0.111",
+  "uvicorn>=0.30.0",
+  "pydantic>=2.9.0",
+  "python-dotenv>=1.0",
+  "orjson>=3.10.7",
+  "sse-starlette>=2.1.0",    # for streaming
+  # Import the agentic core from the monorepo (editable install at root)
+]
+
+[project.scripts]
+biomedkai-api = "biomedkai_api.main:run"
