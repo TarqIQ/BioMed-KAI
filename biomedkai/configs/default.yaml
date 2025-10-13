@@ -4,7 +4,7 @@ runtime:
 
 llm:
   provider: "llamacpp"
-  model_path: "H:/workspace/NEXIS/src/models/Meta-Llama-3.1-8B-Instruct-Q8_0.gguf"
+  model_path: /path_to_models/models/Meta-Llama-3.1-8B-Instruct-Q8_0.gguf"
   n_ctx: 8192
   n_threads: 32
   n_gpu_layers: 256
