@@ -1,255 +1,428 @@
-# BioMed-KAI: Biomedicine Knowledge-Aided Intelligence
+# 🧬 BioMed-KAI
+
+**Agentic Biomedical Reasoning with Graph-Augmented Memory, FastAPI + WebSocket, and Reproducible CLI**
 
 <div align="center">
 
-![BioMed-KAI Logo](https://img.shields.io/badge/BioMed--KAI-Agentic%20AI%20Medicine-blue?style=for-the-badge)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Docker](https://img.shields.io/badge/Docker-Supported-blue?style=for-the-badge&logo=docker)](https://docker.com)
-[![Neo4j](https://img.shields.io/badge/Neo4j-Graph%20Database-green?style=for-the-badge&logo=neo4j)](https://neo4j.com)
-
-**An agentic CARE-RAG powered precision medicine platform with context-aware AI agents and dynamic medical knowledge graphs**
-
-[🌐 Live Demo](http://pitools.niper.ac.in/biomedkai/home) | [📖 Documentation](#documentation) | [🤝 Contributing](CONTRIBUTING.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](#license)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi\&logoColor=white)](https://fastapi.tiangolo.com/)
+[![llama.cpp](https://img.shields.io/badge/LLM-llama.cpp-orange)](README-LLAMACCPP.md)
+[![Neo4j](https://img.shields.io/badge/Graph-Neo4j-2081C3?logo=neo4j\&logoColor=white)](https://neo4j.com/)
+[![Python](https://img.shields.io/badge/Python-3.10+-yellow.svg)](https://www.python.org/)
 
 </div>
 
-## 🎯 Overview
+---
 
-BioMed-KAI represents the next generation of precision medicine platforms, leveraging **agentic AI systems** powered by advanced RAG (Retrieval-Augmented Generation) architecture. Our platform combines intelligent AI agents with comprehensive medical knowledge graphs to provide healthcare professionals with autonomous, context-aware diagnostic support and personalized treatment recommendations.
+## 1) Overview
 
-Unlike traditional passive AI systems, BioMed-KAI features **proactive AI agents** that can plan discovery workflows, perform self-assessment, and autonomously navigate complex biomedical hypothesis spaces while maintaining human oversight and collaboration.
+**BioMed-KAI (Biomedical Knowledge-Aided Intelligence)** is a **config-first, modular, agentic RAG** framework for biomedical question answering, literature-aware synthesis, and graph-integrated reasoning.
 
-### ✨ Key Features
+What you get:
 
-- **🤖 Agentic Architecture**: Advanced AI agents with a new retrieval-augmented generation for autonomous biomedical reasoning
-- **🧠 LLM-Powered Inference**: State-of-the-art language models optimized for medical text understanding and generation
-- **🕸️ Dynamic Knowledge Graph**: Neo4j-based continuously updated medical knowledge base with semantic relationships
-- **🎯 Context-Aware Intelligence**: AI agents that understand clinical context and adapt reasoning accordingly
-- **📊 Multi-Agent Collaboration**: Specialized agents working together for comprehensive medical analysis
-- **🔄 Self-Reflective Learning**: Agents that can assess their own knowledge gaps and improve over time
-- **⚡ Real-time Inference**: Fast, scalable architecture for production medical environments
+* **Agentic orchestration** — `MedicalAgentOrchestrator` coordinates domain agents (evidence, reasoning, safety).
+* **Graph-augmented memory** — hybrid short/long/graph memory via Redis, Postgres, and **Neo4j**.
+* **Unified service** — FastAPI HTTP + **WebSocket streaming** with incremental output.
+* **Local LLM** — `LlamaModelWrapper` using **llama-cpp-python** (CPU or GPU) for on-prem inference.
+* **Reproducible CLI** — run the same pipelines headless for experiments & paper artifacts.
+* **Structured logging** — `structlog` JSON logs for auditability and tracing.
 
-## 🏗️ Architecture
+---
 
-```
-┌─────────────────┐    ┌───────────────────────────────┐    ┌─────────────────┐
-│   Frontend      │    │    BioMedKAI Backend          │    │  Knowledge      │
-│   Web App       │◄──►│   Agentic RAG System          │◄──►│  Graph (Neo4j)  │
-│   (Go Server)   │    │   • AI Agent Orchestration    │    │  Medical Data   │
-└─────────────────┘    │   • LLM Inference Engine      │    └─────────────────┘
-         │             │   • CARE-RAG Retrieval System      │              │
-         │             │   • Context Management        │              │
-         └─────────────┼───────────────────────────────┼──────────────┘
-                       │   • Multi-Agent Coordination  │
-                       └───────────────────────────────┘
-```
+## 2) Repository Layout (current)
 
-### Agentic AI Components
-
-**Specialized AI Agents:**
-- **Diagnostic Agent**: Autonomous diagnostic reasoning and hypothesis generation
-- **Literature Agent**: Real-time medical literature retrieval and synthesis
-- **Knowledge Graph Agent**: Dynamic graph traversal and relationship discovery
-- **Treatment Agent**: Personalized therapy recommendation and optimization
-- **Validation Agent**: Self-assessment and knowledge gap identification
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-Ensure you have the following installed:
-
-- **Node.js** >= 16.x
-- **Docker** >= 20.x  
-- **Neo4j** >= 5.x
-- **Python** >= 3.9
-- **Go** >= 1.22.x
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/chemplusx/BioMed-KAI.git
-   cd BioMed-KAI
-   ```
-
-2. **Set up the agentic backend**
-   ```bash
-   cd biomedkai-backend
-   pip install -r requirements.txt
-   ```
-
-3. **Configure knowledge graph access**
-   > ⚠️ **Note**: Knowledge graph access requires authorization. Please contact the repository owners for KG credentials.
-
-### Running the Application
-
-#### Agentic Backend
-```bash
-cd biomedkai-backend
-
-// Set the python path
-export PYTHONPATH={CURRENT_WORKING_DIR}
-
-cd src
-python start.py
-```
-The agentic AI system will initialize with:
-- Multi-agent orchestration framework
-- RAG-enabled LLM inference engine  
-- Knowledge graph connectivity
-- Real-time learning capabilities
-
-#### Frontend Web Application
-```bash
-cd webapp
-go run main.go
-```
-
-**Production Build:**
-```bash
-go build main.go && ./main
-```
-
-The platform will be available with full agentic AI capabilities, featuring autonomous medical reasoning and collaborative agent interactions.
-
-## 📚 Technology Stack
-
-| Component | Technology | Purpose |
-|-----------|------------|---------|
-| **Frontend** | Go Web Server | High-performance web interface and API gateway |
-| **Agentic Backend** | Python + RAG Framework | Multi-agent AI system with retrieval-augmented generation |
-| **LLM Inference** | Advanced Language Models | Medical text understanding and autonomous reasoning |
-| **Knowledge Graph** | Neo4j | Dynamic medical knowledge with semantic relationships |
-| **CARE-RAG System** | Vector Database + Retrieval | Context-aware knowledge augmentation |
-| **Agent Framework** | Multi-Agent Orchestration | Collaborative AI agent coordination |
-| **Deployment** | Docker | Containerized microservices architecture |
-
-## 🎯 Agentic AI Capabilities
-
-### 🤖 Autonomous Medical Reasoning
-Our AI agents can independently:
-- **Plan Discovery Workflows**: Break down complex medical queries into actionable subtasks
-- **Navigate Hypothesis Spaces**: Explore multiple diagnostic and treatment pathways
-- **Perform Self-Assessment**: Identify knowledge gaps and seek additional information
-- **Generate Testable Hypotheses**: Propose evidence-based medical insights
-
-### 🔄 CARE-RAG-Enhanced Intelligence
-- **Dynamic Knowledge Retrieval**: Real-time access to relevant medical literature and data
-- **Context-Aware Augmentation**: Intelligent selection of supporting evidence
-- **Multi-Modal Integration**: Combining textual, clinical, and molecular data
-- **Continuous Learning**: Agents that improve through interaction and feedback
-
-### 🏥 Clinical Applications
-
-#### **Diagnostic Support**
-- **Multi-Agent Consultation**: Specialized agents collaborate on complex cases
-- **Evidence Synthesis**: Automatic integration of symptoms, labs, and medical history
-- **Differential Diagnosis**: AI-powered exploration of alternative diagnoses
-
-#### **Treatment Optimization**  
-- **Personalized Recommendations**: Context-aware therapy suggestions
-- **Drug Interaction Analysis**: Real-time safety assessment
-- **Treatment Pathway Planning**: Sequential therapy optimization
-
-#### **Research Acceleration**
-- **Literature Mining**: Autonomous analysis of medical publications
-- **Biomarker Discovery**: Graph-based identification of novel indicators
-- **Clinical Trial Matching**: Intelligent patient-trial alignment
-
-## 🛠️ Development
-
-### Project Structure
 ```
 BioMed-KAI/
-├── biomedkai-backend/    # Agentic RAG system
-│   ├── agents/          # AI agent implementations
-│   ├── rag/             # Retrieval-augmented generation
-│   ├── llm/             # Language model inference
-│   ├── knowledge/       # Knowledge graph interfaces
-│   └── start.py         # Backend entry point
-├── webapp/              # Go web server
-│   ├── main.go         # Web server entry point
-│   ├── static/         # Frontend assets
-│   └── templates/      # Web templates
-├── docker/             # Docker configuration
-├── docs/               # Documentation
-└── tests/              # Test suites
+├─ biomedkai/                   # Core Python package (shared utils, tools, adapters)
+│
+├─ biomedkai_api/               # Web service (FastAPI + WS)
+│  ├─ api/                      #   REST + WebSocket routers
+│  ├─ config/                   #   pydantic / OmegaConf settings
+│  ├─ core/                     #   MedicalAgentOrchestrator (agent/routing glue)
+│  ├─ memory/                   #   HybridMemorySystem (Redis, Postgres, Neo4j)
+│  ├─ models/                   #   LlamaModelWrapper (llama.cpp runtime)
+│  ├─ monitoring/               #   metrics & health endpoints
+│  ├─ safety/, tools/           #   validation & tool registry
+│  └─ main.py                   #   FastAPI app (lifespan boot)
+│
+├─ apps/                        # UI/visualization (if present)
+├─ services/                    # auxiliary/legacy services (kept for compat)
+├─ experiments/                 # multilingual pilot / eval harnesses
+├─ docker/                      # Dockerfiles & compose (optional)
+│
+├─ .env.example                 # example environment variables
+├─ pyproject.toml               # entry points: biomedkai, biomedkai-api
+├─ README-LLAMACCPP.md          # llama.cpp build/install guidance
+└─ README.md                    # this document
 ```
 
-### API Endpoints
+---
 
-The agentic platform exposes:
-- **Agent Orchestration**: `/api/agents/orchestrate`
-- **CARE-RAG Inference**: `/api/rag/generate`
-- **Knowledge Graph**: `/api/kg/query`
-- **Multi-Agent Chat**: `/api/agents/chat`
-- **Agent Status**: `/api/agents/status`
+## 3) Features
 
-### Agent Development
+| Area                       | What’s included                                                                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Agents & Orchestration** | Multi-agent coordination (`MedicalAgentOrchestrator`) with rule/learned routing (internals), evidence synthesis, reasoning, and optional safety gating |
+| **LLM Runtime**            | `LlamaModelWrapper` (llama-cpp-python); CPU baseline, **GPU offload** via CUDA/Metal/ROCm                                                              |
+| **Memory**                 | `HybridMemorySystem` binds Redis (short-term), Postgres (long-term), **Neo4j** graph                                                                   |
+| **Web Service**            | FastAPI REST + **WebSocket** streaming; CORS enabled for local dev                                                                                     |
+| **CLI**                    | Reproducible command-line interface, mirroring API behavior                                                                                            |
+| **Observability**          | `structlog` JSON logs; health check and metrics endpoints                                                                                              |
 
-Adding new specialized agents:
+---
+
+## 4) Installation
+
+### 4.1 Prerequisites
+
+* **Python 3.10+**
+* Optional services (recommended in production): **Redis**, **PostgreSQL**, **Neo4j**
+* For GPU inference: suitable **NVIDIA driver** and CUDA runtime (e.g., 12.4) or **Metal** (macOS)
+
+### 4.2 Install the package
+
+```bash
+git clone https://github.com/chemplusx/BioMed-KAI.git
+cd BioMed-KAI
+pip install -e .
+```
+
+If your environment is missing logging/runtime deps:
+
+```bash
+pip install structlog fastapi uvicorn redis neo4j psycopg2-binary omegaconf pydantic
+```
+
+### 4.3 Install the LLM backend (llama.cpp)
+
+See **README-LLAMACCPP.md** for full, platform-specific instructions.
+
+**CPU (quick start):**
+
+```bash
+pip install "llama-cpp-python==0.2.90"
+```
+
+**GPU (example: CUDA 12.4, Windows/Linux):**
+
+```bash
+pip install --no-cache-dir \
+  --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124 \
+  "llama-cpp-python==0.2.90"
+```
+
+> **Tip:** set `n_gpu_layers > 0` in your config to enable GPU offload. If a CPU wheel is detected while offload is requested, the app raises a clear, actionable error.
+
+---
+
+## 5) Quick Start
+
+### 5.1 Start the API
+
+Using the entry point:
+
+```bash
+biomedkai-api
+```
+
+Or explicitly:
+
+```bash
+python -m uvicorn biomedkai_api.main:app --reload --log-level debug
+```
+
+* Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+* Health: `GET /health`
+
+**Fast boot while wiring services (optional):**
+
+```bash
+# bring up the server before model/memory are ready
+set BIOMEDKAI_SKIP_MODEL=1
+set BIOMEDKAI_SKIP_MEMORY=1
+biomedkai-api
+```
+
+Unset those envs later for full operation.
+
+### 5.2 CLI (reproducible runs)
+
+```bash
+biomedkai "Summarize evidence for paracetamol in knee osteoarthritis."
+```
+
+Examples:
+
+```bash
+# choose an agent explicitly (for ablations)
+biomedkai --agent evidence_agent --out out.json "Explain CYP2D6 polymorphism impact on tamoxifen"
+
+# use a config file (OmegaConf YAML)
+biomedkai --config biomedkai_api/config/agent.yaml "Mechanism of SGLT2 inhibitors in HF"
+```
+
+---
+
+## 6) API Surface
+
+### 6.1 REST
+
+Key endpoints (stable, minimal, and UI-friendly):
+
+| Method | Path                  | Description                                                                         |
+| -----: | --------------------- | ----------------------------------------------------------------------------------- |
+| `POST` | `/api/v1/chat`        | Non-streaming QA; returns final JSON answer                                         |
+| `POST` | `/api/v1/chat/stream` | **NDJSON stream**: `session_start` → multiple `response_chunk` → `session_complete` |
+|  `GET` | `/health`             | Liveness/readiness                                                                  |
+
+**Stream framing (NDJSON):**
+
+```json
+{"type": "session_start", "session_id": "..."}
+{"type": "response_chunk", "text": "partial text..."}
+{"type": "response_chunk", "text": "next part..."}
+{"type": "session_complete", "usage": {...}, "agent": "evidence_agent"}
+```
+
+> A one-off `"routing_info"` NDJSON line may be included for audit (agent choice & scores). The UI can ignore it safely.
+
+### 6.2 WebSocket (incremental generation)
+
+**Endpoint:** `ws://localhost:8000/ws/chat`
+(alternative path with session id is supported if present in your router)
+
+**Server → client frames (kept exactly as in your code):**
+
+```json
+{ "type": "GENERATE_RESPONSE", "stream_start": true }
+{ "type": "GENERATE_RESPONSE", "chunk": "tokenized or segmented text...", "agent_mode": true }
+{ "type": "GENERATE_RESPONSE", "stream_end": true }
+```
+
+**Python client example:**
 
 ```python
-from biomedkai.agents import BaseAgent
+import asyncio, websockets, json
 
-class CustomMedicalAgent(BaseAgent):
-    def __init__(self):
-        super().__init__(
-            name="custom_agent",
-            capabilities=["specialized_task"],
-            knowledge_domains=["specific_medical_field"]
-        )
-    
-    async def process(self, query, context):
-        # Implement agent-specific logic
-        result = await self.rag_inference(query, context)
-        return self.validate_and_respond(result)
+async def chat():
+    async with websockets.connect("ws://localhost:8000/ws/chat") as ws:
+        await ws.send(json.dumps({
+            "type": "query",
+            "prompt": "Explain CRISPR-Cas9 mechanism",
+            "use_agents": True
+        }))
+        async for raw in ws:
+            msg = json.loads(raw)
+            if msg.get("stream_start"):
+                print("\n--- stream start ---\n")
+            if "chunk" in msg:
+                print(msg["chunk"], end="", flush=True)
+            if msg.get("stream_end"):
+                print("\n--- stream end ---\n")
+                break
+
+asyncio.run(chat())
 ```
 
-## 📊 Performance & Benchmarks
+---
 
-**Agentic AI Performance:**
-- **Response Time**: <2s for complex multi-agent queries
-- **Accuracy**: 95%+ on medical Q&A benchmarks
-- **Knowledge Coverage**: 50M+ medical entities and relationships
-- **Agent Coordination**: Sub-second inter-agent communication
+## 7) Configuration
 
-## 🤝 Contributing
+Configuration is handled via **OmegaConf (YAML)** + **Pydantic** settings. Typical fields:
 
-We welcome contributions to advance agentic AI in medicine!
+```yaml
+runtime:
+  device: "cuda"          # "cpu" or "cuda"
+  seed: 42
 
-### Getting Started
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/agent-enhancement`)
-3. Implement your agentic AI improvements
-4. Add comprehensive tests for agent behaviors
-5. Update documentation for new agent capabilities
-6. Submit a Pull Request
+llm:
+  provider: "llama_cpp"
+  model_path: "H:/models/gguf/YourModel.gguf"
+  n_ctx: 8192
+  n_threads: 8
+  n_gpu_layers: 32        # >0 enables GPU offload
+  temperature: 0.2
+  top_p: 0.9
+  repeat_penalty: 1.1
+  chat_format: "llama-3"
 
-Please read our [Contributing Guidelines](CONTRIBUTING.md) for detailed information about:
-- Agent development standards
-- RAG system enhancements
-- Knowledge graph expansion
-- Multi-agent coordination patterns
+memory:
+  redis_host: "localhost"
+  redis_port: 6379
+  postgres_user: "medical_ai"
+  postgres_password: "password"
+  postgres_host: "localhost"
+  postgres_port: 5432
+  postgres_db: "medical_memory"
+  neo4j_uri: "neo4j://localhost:7687"
+  neo4j_user: "neo4j"
+  neo4j_password: "password"
+```
 
-### Research Collaboration
+**Useful environment variables**
 
-BioMed-KAI is designed for academic and industry research in:
-- **Agentic AI for Medicine**: Developing autonomous AI systems for biomedical discovery
-- **Multi-Agent Systems**: Collaborative AI architectures for healthcare
-- **RAG Optimization**: Enhanced retrieval-augmented generation for medical domains
-- **Knowledge Graph AI**: Graph-based reasoning for precision medicine
+```
+APP_PORT=8000
+APP_RELOAD=1
+APP_LOG_LEVEL=debug
+BIOMEDKAI_SKIP_MODEL=0
+BIOMEDKAI_SKIP_MEMORY=0
+```
 
-## 📄 License
+**Performance tuning (llama.cpp)**
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+* Increase `n_gpu_layers` until VRAM is close to the safe limit.
+* Adjust `n_threads` to the number of performance CPU cores.
+* Consider `n_ctx` vs latency trade-offs (bigger context costs more memory/time).
 
+---
 
-## 📞 Contact & Support
+## 8) System Architecture
 
-- **Live Platform**: [http://pitools.niper.ac.in/biomedkai/home](http://pitools.niper.ac.in/biomedkai/home)
-- **Repository**: [https://github.com/chemplusx/BioMed-KAI](https://github.com/chemplusx/BioMed-KAI)
-- **Issues**: GitHub Issues for bug reports and feature requests
-- **Agent Development**: Contact maintainers for agentic AI collaboration
-- **Knowledge Graph Access**: Repository owners for credentials and data access
+```mermaid
+flowchart LR
+    UI[User / Client / UI] -->|HTTP / WS| API[FastAPI Service]
+    subgraph "FastAPI Service (biomedkai_api)"
+      API --> ORCH[MedicalAgentOrchestrator]
+      ORCH --> AGENTS["Domain Agents 
+      (evidence / reasoning / safety)"]
+      ORCH --> LLM["LlamaModelWrapper
+      (llama-cpp)"]
+      ORCH --> MEM[HybridMemorySystem]
+      MEM --> R[Redis]
+      MEM --> PG[Postgres]
+      MEM --> NEO[Neo4j]
+    end
+    LLM -->|streamed tokens / segments| API
+    API -->|final JSON / stream| UI
+```
+
+### Execution flow (end-to-end)
+
+1. **Client** sends prompt via REST (`/api/v1/chat` or `/api/v1/chat/stream`) or **WebSocket** (`/ws/chat`).
+2. **FastAPI** forwards to `MedicalAgentOrchestrator`.
+3. **Orchestrator** selects/coordinates agents and calls:
+
+   * **`LlamaModelWrapper`** (local inference via llama.cpp, streamed or chunked)
+   * **`HybridMemorySystem`** (retrieve context from Redis/PG/Neo4j)
+   * **Tools/Safety** as configured
+4. **Streaming path** yields incremental chunks (`GENERATE_RESPONSE` frames) to the client.
+5. **Finalization** returns a structured record (agent, usage, evidence summary if applicable).
+
+---
+
+## 9) Reproducibility & Research
+
+* Use the **CLI** for headless runs (saves JSON artifacts).
+* Log structure includes:
+
+  * agent selection (if enabled)
+  * evidence identifiers / retrieval metadata
+  * model parameters & seeds
+  * outputs + optional scores (BERTScore/ROUGE if added in `experiments/`)
+
+Example:
+
+```bash
+biomedkai --out results/oa_paracetamol.json \
+  "Summarize RCT evidence for paracetamol in osteoarthritis."
+```
+
+### Multilingual pilot (experiments/)
+
+The `experiments/` folder contains harnesses for multilingual evaluation (prompts, per-language outputs).
+Run via CLI or an eval route if you expose one; artifacts are written under `results/`.
+
+---
+
+## 10) Development Guide
+
+### Local dev setup
+
+```bash
+pip install -e .[dev]        # if you maintain a dev extra
+pre-commit install           # if repo has hooks
+```
+
+### Tests
+
+```bash
+pytest -q
+```
+
+### Docker (optional)
+
+```bash
+docker build -t biomedkai .
+docker run -p 8000:8000 --env-file .env biomedkai
+```
+
+### Logging & diagnostics
+
+* **structlog** emits JSON logs (easy to ship to ELK/Datadog).
+* To see early import/startup failures on Windows, run:
+
+  ```bash
+  python -X dev -m uvicorn biomedkai_api.main:app --log-level debug
+  ```
+* Startup toggles:
+
+  * `BIOMEDKAI_SKIP_MODEL=1` — skip LLM load during boot.
+  * `BIOMEDKAI_SKIP_MEMORY=1` — skip Redis/PG/Neo4j init during boot.
+
+---
+
+## 11) Troubleshooting
+
+| Symptom                                    | Likely Cause                                                                      | Fix                                                                                                                                                      |
+| ------------------------------------------ | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `biomedkai-api` “hangs” with no output     | Import error before Uvicorn (e.g., `structlog` missing) or blocking lifespan init | Run `python -m uvicorn biomedkai_api.main:app --reload --log-level debug` to see the traceback. Install missing deps. Use `BIOMEDKAI_SKIP_*` to isolate. |
+| GPU not used (`n_gpu_layers>0` but 0% GPU) | CPU wheel of `llama-cpp-python` installed                                         | Reinstall a **GPU** wheel from the maintainer index (see **README-LLAMACCPP.md**).                                                                       |
+| Neo4j/Redis/Postgres connection timeouts   | Services not running, wrong creds                                                 | Start services; verify URLs from `.env` / config; check firewall/ports.                                                                                  |
+| WebSocket connects but no chunks           | Orchestrator not yielding; model not initialized                                  | Check logs; confirm LLM path exists; try CPU first, then GPU.                                                                                            |
+| NDJSON client parses nothing               | Client expecting JSON array instead of NDJSON                                     | Read line-by-line; each line is a JSON object.                                                                                                           |
+
+---
+
+## 12) Security & Data Handling
+
+* This repository is **research software**. It is **not** a medical device and should **not** be used for clinical decision-making.
+* When using real or sensitive data:
+
+  * remove PHI
+  * disable external network calls from within agents/tools
+  * follow your IRB/data governance policies
+
+---
+
+## 13) Roadmap
+
+* Optional **token-level llama.cpp streaming** (already compatible with WS framing)
+* Configurable **agent router** (rule / learned / bandit) surfaced via API/CLI flags
+* Extended **multilingual** evaluation harness and metrics
+* Pluggable **indexers** for literature & pathway corpora
+
+---
+
+## 14) Contributing
+
+PRs are welcome. Please include:
+
+* a brief design note (what/why)
+* tests for new behaviors
+* updates to README/configs if applicable
+
+---
+
+## 15) License
+
+**MIT** — see `LICENSE`.
+
+---
+
+## 16) Contact
+
+* **Maintainer:** [@chemplusx](https://github.com/chemplusx)
+* For collaboration or demo requests, open an issue or reach out via the profile email.
+
+---
