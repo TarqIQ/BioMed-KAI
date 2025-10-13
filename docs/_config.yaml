@@ -1,0 +1,71 @@
+# GitHub Pages Configuration for BioMed-KAI Showcase
+
+# Site settings
+title: "BioMed-KAI"
+description: "Advanced Agentic AI Platform for Precision Medicine"
+url: "https://chemplusx.github.io"
+baseurl: "/BioMed-KAI"
+
+# Repository
+repository: "chemplusx/BioMed-KAI"
+
+# Theme
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# SEO settings
+author: "BioMed-KAI Research Team"
+twitter:
+  username: biomedkai
+  card: summary_large_image
+
+logo: /assets/biomedkai-logo.png
+
+# Social links
+github_username: chemplusx
+linkedin_username: biomedkai
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Include and exclude files
+include:
+  - _pages
+  - assets
+  - .nojekyll
+
+exclude:
+  - vendor
+  - .bundle
+  - .sass-cache
+  - .jekyll-cache
+  - .jekyll-metadata
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - README.md
+
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:name/
+
+liquid:
+  error_mode: warn
+  strict_filters: false
+  strict_variables: false
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
