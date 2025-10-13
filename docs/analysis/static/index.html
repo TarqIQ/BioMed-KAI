@@ -1,0 +1,230 @@
+---
+layout: none
+sitemap: false
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Visualizations - BioMed-KAI Analysis</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            min-height: 100vh;
+        }
+
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-glass fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-brain text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">BioMed-KAI</h1>
+                        <p class="text-xs text-gray-600">Visualization Gallery</p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="../index.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Home</a>
+                    <a href="../analysis.html" class="text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Analysis</a>
+                    <a href="../sources.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Sources</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Static Visualizations</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Publication-ready figures and charts from our comprehensive analysis
+                </p>
+            </div>
+
+            <!-- Breadcrumb -->
+            <nav class="mb-8">
+                <ol class="flex items-center space-x-2 text-sm">
+                    <li><a href="../analysis.html" class="text-blue-600 hover:underline">Analysis</a></li>
+                    <li class="text-gray-400">/</li>
+                    <li class="text-gray-600">Static Visualizations</li>
+                </ol>
+            </nav>
+
+            <!-- Gallery Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <div class="image-card">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <img src="care_rag_architecture.png" alt="CARE-RAG Architecture" 
+                             class="w-full h-64 object-cover cursor-pointer"
+                             onclick="openLightbox('care_rag_architecture.png', 'CARE-RAG Architecture')">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">CARE-RAG Architecture</h3>
+                        <p class="text-gray-600 text-sm">System architecture showing dual-pathway classification and multi-agent coordination</p>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <img src="comparison_analysis.png" alt="Performance Comparison" 
+                             class="w-full h-64 object-cover cursor-pointer"
+                             onclick="openLightbox('comparison_analysis.png', 'Performance Comparison')">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Performance Comparison</h3>
+                        <p class="text-gray-600 text-sm">Comparison with state-of-the-art biomedical AI systems</p>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <img src="agent_heatmap.png" alt="Agent Performance Heatmap" 
+                             class="w-full h-64 object-cover cursor-pointer"
+                             onclick="openLightbox('agent_heatmap.png', 'Agent Performance Heatmap')">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Agent Performance Heatmap</h3>
+                        <p class="text-gray-600 text-sm">Performance metrics across all agents and evaluation criteria</p>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <img src="statistical_validation.png" alt="Statistical Validation" 
+                             class="w-full h-64 object-cover cursor-pointer"
+                             onclick="openLightbox('statistical_validation.png', 'Statistical Validation')">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Statistical Validation</h3>
+                        <p class="text-gray-600 text-sm">Bootstrap confidence intervals and effect size analysis</p>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <img src="error_dashboard.png" alt="Error Analysis Dashboard" 
+                             class="w-full h-64 object-cover cursor-pointer"
+                             onclick="openLightbox('error_dashboard.png', 'Error Analysis Dashboard')">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Error Analysis Dashboard</h3>
+                        <p class="text-gray-600 text-sm">Comprehensive error pattern analysis and recovery strategies</p>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <img src="temperature_3d.png" alt="Temperature Sensitivity" 
+                             class="w-full h-64 object-cover cursor-pointer"
+                             onclick="openLightbox('temperature_3d.png', 'Temperature Sensitivity')">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Temperature Sensitivity</h3>
+                        <p class="text-gray-600 text-sm">3D visualization of temperature optimization results</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back Navigation -->
+            <div class="text-center">
+                <a href="../../analysis.html" 
+                   class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Back to Analysis Overview
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <div class="absolute top-4 right-4">
+            <button onclick="closeLightbox()" class="text-white hover:text-gray-300">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        <img id="lightbox-image" src="" alt="">
+        <div class="absolute bottom-4 left-4 text-white">
+            <h3 id="lightbox-title" class="text-xl font-bold"></h3>
+        </div>
+    </div>
+
+    <script>
+        function openLightbox(src, title) {
+            const lightbox = document.getElementById('lightbox');
+            const image = document.getElementById('lightbox-image');
+            const titleEl = document.getElementById('lightbox-title');
+            
+            image.src = src;
+            titleEl.textContent = title;
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+
+</html>
