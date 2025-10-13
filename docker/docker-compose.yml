@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  neo4j:
+    image: neo4j:5
+    ports: ["7474:7474", "7687:7687"]
+    environment:
+      - NEO4J_AUTH=${NEO4J_AUTH:-neo4j/test}
+    volumes:
+      - neo4j_data:/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    env_file: ../.env
+    depends_on: [neo4j]
+    ports: ["8000:8000"]
+    command: ["biomedkai-api"]
+
+  web:
+    # If your webapp is Go:
+    build:
+      context: ../apps/webapp
+      dockerfile: Dockerfile
+    ports: ["8080:8080"]
+    environment:
+      - BACKEND_URL=http://api:8000
+    depends_on: [api]
+
+volumes:
+  neo4j_data: {}
