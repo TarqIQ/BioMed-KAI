@@ -95,8 +95,6 @@ pip install structlog fastapi uvicorn redis neo4j psycopg2-binary omegaconf pyda
 
 ### 4.3 Install the LLM backend (llama.cpp)
 
-See **README-LLAMACCPP.md** for full, platform-specific instructions.
-
 **CPU (quick start):**
 
 ```bash
@@ -104,6 +102,18 @@ pip install "llama-cpp-python==0.2.90"
 ```
 
 **GPU (example: CUDA 12.4, Windows/Linux):**
+
+Once the package is installed as above, one can use the gpu installation helper tool to install the appropriate wheel:
+
+```bash
+# Install the appropriate GPU wheel, by letting the tool detect your environment
+biomedkai-gpu install 
+
+# Or specify CUDA version explicitly (e.g., cu124 for CUDA 12.4)
+biomedkai-gpu install --flavor cu124 --version 0.2.90
+```
+
+In case the above tool does not work, you can install the wheel directly from the maintainer's index:
 
 ```bash
 pip install --no-cache-dir \
@@ -119,17 +129,12 @@ pip install --no-cache-dir \
 
 ### 5.1 Start the API
 
-Using the entry point:
+To run the web-service :
 
 ```bash
 biomedkai-api
 ```
 
-Or explicitly:
-
-```bash
-python -m uvicorn biomedkai_api.main:app --reload --log-level debug
-```
 
 * Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 * Health: `GET /health`
@@ -237,7 +242,7 @@ runtime:
 
 llm:
   provider: "llama_cpp"
-  model_path: "H:/models/gguf/YourModel.gguf"
+  model_path: "path_to_model/YourModel.gguf"
   n_ctx: 8192
   n_threads: 8
   n_gpu_layers: 32        # >0 enables GPU offload
@@ -406,17 +411,13 @@ docker run -p 8000:8000 --env-file .env biomedkai
 
 ## 14) Contributing
 
-PRs are welcome. Please include:
-
-* a brief design note (what/why)
-* tests for new behaviors
-* updates to README/configs if applicable
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
 ## 15) License
 
-**MIT** — see `LICENSE`.
+**MIT** — see [`LICENSE`](LICENSE).
 
 ---
 
