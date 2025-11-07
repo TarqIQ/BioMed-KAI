@@ -173,7 +173,7 @@ sitemap: false
                 </p>
                 <p class="text-lg text-gray-500 max-w-4xl mx-auto leading-relaxed">
                     Complete ablation studies, comparative benchmarks, and interactive visualizations 
-                    from our research paper with statistical significance testing
+                    from our platform evaluation suite with statistical significance testing
                 </p>
             </div>
 
@@ -350,11 +350,81 @@ sitemap: false
         </div>
     </section>
 
+    <!-- Inline Exploration -->
+    <section id="explore" class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Explore Inline</h2>
+                <p class="text-gray-600">Switch between dashboards without leaving this page</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex flex-wrap gap-2 justify-center mb-6">
+                <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-blue-600 text-white" data-target="#tab-performance">Performance</button>
+                <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-white text-gray-700 hover:border-blue-300" data-target="#tab-error">Error Analysis</button>
+                <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-white text-gray-700 hover:border-blue-300" data-target="#tab-temperature">Temperature</button>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="flex items-center justify-between bg-white border rounded-xl px-4 py-3 mb-3">
+                <div class="text-sm text-gray-600">
+                    Interactive viewer • Use the buttons on the right to open in a new tab or toggle fullscreen
+                </div>
+                <div class="flex items-center gap-2">
+                    <a id="open-new-tab" href="analysis/interactive/interactive_dashboard.html" target="_blank" class="px-3 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm inline-flex items-center">
+                        <i class="fas fa-external-link-alt mr-2"></i>Open in new tab
+                    </a>
+                    <button id="toggle-fullscreen" class="px-3 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800 text-sm inline-flex items-center">
+                        <i class="fas fa-expand mr-2"></i>Fullscreen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Iframe Containers -->
+            <div id="viewer" class="dashboard-container rounded-2xl border">
+                <div id="tab-performance" class="tab-pane">
+                    <iframe src="analysis/interactive/interactive_dashboard.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
+                </div>
+                <div id="tab-error" class="tab-pane hidden">
+                    <iframe src="analysis/interactive/interactive_error_analysis.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
+                </div>
+                <div id="tab-temperature" class="tab-pane hidden">
+                    <iframe src="analysis/interactive/interactive_temperature_analysis.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Gallery -->
+    <section class="py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-bold text-gray-900">Static Gallery</h3>
+                <a href="analysis/static/" class="text-blue-600 hover:underline text-sm font-semibold">View all</a>
+            </div>
+            <div class="grid gap-4 grid-cols-2 md:grid-cols-4">
+                <img src="analysis/static/care_rag_architecture.png" alt="CARE-RAG Architecture" class="rounded-xl border cursor-zoom-in gallery-item">
+                <img src="analysis/static/comparison_analysis.png" alt="Comparison Analysis" class="rounded-xl border cursor-zoom-in gallery-item">
+                <img src="analysis/static/statistical_validation.png" alt="Statistical Validation" class="rounded-xl border cursor-zoom-in gallery-item">
+                <img src="analysis/static/temperature_3d.png" alt="3D Temperature" class="rounded-xl border cursor-zoom-in gallery-item">
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50">
+        <button id="lightbox-close" class="absolute top-6 right-6 text-white text-xl p-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-20">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="lightbox-image" src="" alt="" class="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl border">
+        <div id="lightbox-caption" class="absolute bottom-6 text-white text-sm opacity-80"></div>
+    </div>
+
     <!-- Research Validation -->
     <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Research Validation</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Validation & Reproducibility</h2>
                 <p class="text-xl text-gray-600">Rigorous statistical methodology and reproducible results</p>
             </div>
 
@@ -416,13 +486,13 @@ sitemap: false
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-gray-900">BioMed-KAI</h3>
-                            <p class="text-sm text-gray-600">Analysis Results</p>
+                        <p class="text-sm text-gray-600">Analysis Results</p>
                         </div>
                     </div>
-                    <p class="text-gray-600 leading-relaxed">
-                        Comprehensive analysis results for the BioMed-KAI research project, 
-                        demonstrating significant improvements in biomedical AI performance.
-                    </p>
+                <p class="text-gray-600 leading-relaxed">
+                    Comprehensive analysis results for the BioMed-KAI platform, demonstrating 
+                    significant improvements in biomedical AI performance.
+                </p>
                 </div>
                 
                 <div>
@@ -446,7 +516,7 @@ sitemap: false
             
             <div class="border-t border-gray-200 pt-8 text-center">
                 <p class="text-gray-600">
-                    &copy; 2025 BioMed-KAI Research Project. Advancing Precision Medicine through Agentic AI.
+                    &copy; 2025 BioMed-KAI Platform. Advancing Precision Medicine through Agentic AI.
                 </p>
             </div>
         </div>
@@ -468,6 +538,70 @@ sitemap: false
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
+        });
+
+        // Tabs logic for inline viewer
+        const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
+        const panes = Array.from(document.querySelectorAll('.tab-pane'));
+        const openNewTab = document.getElementById('open-new-tab');
+        const fullscreenBtn = document.getElementById('toggle-fullscreen');
+        const viewer = document.getElementById('viewer');
+
+        function setActiveTab(targetId) {
+            panes.forEach(p => p.classList.add('hidden'));
+            const active = document.querySelector(targetId);
+            if (active) active.classList.remove('hidden');
+
+            tabButtons.forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+            const activeBtn = tabButtons.find(b => b.getAttribute('data-target') === targetId);
+            if (activeBtn) activeBtn.classList.add('bg-blue-600', 'text-white');
+
+            // Update open in new tab link
+            const iframe = active ? active.querySelector('iframe') : null;
+            if (iframe) openNewTab.href = iframe.src;
+        }
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => setActiveTab(btn.getAttribute('data-target')));
+        });
+        // Initialize default
+        setActiveTab('#tab-performance');
+
+        // Fullscreen toggle
+        let isFullscreen = false;
+        fullscreenBtn.addEventListener('click', () => {
+            isFullscreen = !isFullscreen;
+            const iframes = viewer.querySelectorAll('iframe');
+            iframes.forEach(f => f.style.height = isFullscreen ? '85vh' : '640px');
+            fullscreenBtn.innerHTML = isFullscreen 
+                ? '<i class="fas fa-compress mr-2"></i>Exit Fullscreen'
+                : '<i class="fas fa-expand mr-2"></i>Fullscreen';
+        });
+
+        // Lightbox for images
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-image');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        const lightboxClose = document.getElementById('lightbox-close');
+        document.querySelectorAll('.gallery-item').forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightboxCaption.textContent = img.alt || '';
+                lightbox.classList.remove('hidden');
+                lightbox.classList.add('flex');
+            });
+        });
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            lightboxImg.src = '';
+        });
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.add('hidden');
+                lightbox.classList.remove('flex');
+                lightboxImg.src = '';
+            }
         });
     </script>
 </body>

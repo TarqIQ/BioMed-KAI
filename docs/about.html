@@ -9,7 +9,7 @@ sitemap: false
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - BioMed-KAI</title>
-    <meta name="description" content="Learn about the BioMed-KAI project, research team, and our mission to advance precision medicine through agentic AI.">
+    <meta name="description" content="Learn about the BioMed-KAI platform, team, and our mission to advance precision medicine through agentic AI.">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
@@ -165,25 +165,73 @@ sitemap: false
     <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-50 to-purple-50">
         <div class="max-w-4xl mx-auto text-center">
             <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 fade-in">
-                About BioMed-KAI
+                About the BioMed-KAI Platform
             </h1>
             <p class="text-xl text-gray-600 mb-8 leading-relaxed fade-in-delay">
-                Pioneering the future of precision medicine through advanced agentic AI, 
-                intelligent knowledge graphs, and collaborative research
+                Pioneering the future of precision medicine through advanced agentic AI and 
+                intelligent knowledge graphs, built for real-world healthcare workflows
             </p>
             
             <div class="research-highlight rounded-2xl p-6 fade-in-delay-2">
                 <div class="flex items-center justify-center mb-4">
-                    <i class="fas fa-university text-3xl text-orange-600 mr-3"></i>
+                    <i class="fas fa-rocket text-3xl text-orange-600 mr-3"></i>
                     <div class="text-left">
-                        <h3 class="text-lg font-bold text-gray-900">Research Project</h3>
-                        <p class="text-sm text-gray-600">Advancing AI in Healthcare</p>
+                        <h3 class="text-lg font-bold text-gray-900">Novel Platform</h3>
+                        <p class="text-sm text-gray-600">Purpose-built AI for Precision Medicine</p>
                     </div>
                 </div>
                 <p class="text-gray-700">
-                    This project represents cutting-edge research in applying agentic AI systems 
-                    to precision medicine, conducted by a multidisciplinary team of researchers.
+                    BioMed-KAI is a novel agentic AI platform that integrates dynamic knowledge graphs 
+                    with RAG-enhanced reasoning to deliver evidence-based insights for precision medicine.
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Publications</h2>
+                <p class="text-xl text-gray-600">Peer‑reviewed work featuring the BioMed‑KAI platform</p>
+            </div>
+            <div class="card-light rounded-2xl p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
+                <div class="icon-bg w-16 h-16 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-book-open text-2xl"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">Peer‑reviewed</span>
+                        <span class="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">ScienceDirect</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-1">Featured Publication</h3>
+                    <p class="text-gray-600">
+                        The BioMed‑KAI platform has been published in a peer‑reviewed venue. Read the publication for methodology, results, and validation details.
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649" target="_blank" 
+                       class="bg-gray-900 text-white px-5 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors inline-flex items-center">
+                        <i class="fas fa-external-link-alt mr-2"></i>
+                        Read on ScienceDirect
+                    </a>
+                    <button id="copy-bibtex" 
+                            class="border-2 border-gray-300 text-gray-700 px-5 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors inline-flex items-center">
+                        <i class="fas fa-copy mr-2"></i>
+                        Copy BibTeX
+                    </button>
+                </div>
+            </div>
+            <div class="mt-6 bg-white rounded-xl border">
+                <details class="p-6">
+                    <summary class="cursor-pointer text-sm text-gray-600">Show BibTeX</summary>
+                    <pre id="bibtex-entry" class="mt-4 p-4 rounded-lg bg-gray-50 overflow-x-auto text-sm text-gray-800">@misc{BioMedKAI2025,
+  title        = {BioMed-KAI Platform},
+  year         = {2025},
+  note         = {Peer-reviewed publication describing the platform},
+  howpublished = {\url{https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649}}
+}</pre>
+                </details>
             </div>
         </div>
     </section>
@@ -237,7 +285,7 @@ sitemap: false
     <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Research Team</h2>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Team</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
                     Our multidisciplinary team combines expertise in AI, medicine, and data science 
                     to push the boundaries of what's possible in healthcare technology
@@ -427,7 +475,7 @@ sitemap: false
     <!-- Impact & Future -->
     <section class="py-16 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8">Research Impact & Future Directions</h2>
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Impact & Roadmap</h2>
             
             <div class="card-light rounded-2xl p-8 mb-8">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">Current Contributions</h3>
@@ -448,7 +496,7 @@ sitemap: false
             </div>
 
             <div class="feature-highlight rounded-2xl p-8">
-                <h3 class="text-xl font-bold text-gray-900 mb-4">Future Research Directions</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Roadmap</h3>
                 <div class="grid md:grid-cols-2 gap-6 text-left">
                     <div>
                         <h4 class="font-semibold text-gray-900 mb-2">Enhanced AI Capabilities</h4>
@@ -475,11 +523,10 @@ sitemap: false
     <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
         <div class="max-w-4xl mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-                Join Our Research Journey
+                Explore the BioMed-KAI Platform
             </h2>
             <p class="text-xl text-blue-100 mb-8">
-                Explore our research, contribute to the project, or collaborate with our team 
-                to advance AI in precision medicine
+                Try the live platform, collaborate with our team, or contribute to the codebase
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="http://pitools.niper.ac.in/biomedkai/home" target="_blank" 
@@ -490,7 +537,7 @@ sitemap: false
                 <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" 
                    class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-blue-600 transition-colors inline-flex items-center justify-center">
                     <i class="fab fa-github mr-3"></i>
-                    View Research Code
+                    View Source Code
                 </a>
             </div>
         </div>
@@ -504,7 +551,7 @@ sitemap: false
                     <i class="fas fa-brain text-white"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold text-gray-900">BioMed-KAI Research</h3>
+                    <h3 class="text-lg font-bold text-gray-900">BioMed-KAI Platform</h3>
                     <p class="text-sm text-gray-600">Advancing Precision Medicine</p>
                 </div>
             </div>
@@ -545,6 +592,21 @@ sitemap: false
         document.querySelectorAll('.fade-in, .fade-in-delay, .fade-in-delay-2').forEach(el => {
             observer.observe(el);
         });
+
+        // Copy BibTeX
+        const copyBtn = document.getElementById('copy-bibtex');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', async () => {
+                const bib = document.getElementById('bibtex-entry')?.innerText || '';
+                try {
+                    await navigator.clipboard.writeText(bib);
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => { copyBtn.textContent = 'Copy BibTeX'; }, 1400);
+                } catch (e) {
+                    alert('Copy failed. Please select and copy manually.');
+                }
+            });
+        }
     </script>
 </body>
 
