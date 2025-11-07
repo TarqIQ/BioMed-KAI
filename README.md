@@ -9,8 +9,18 @@
 [![llama.cpp](https://img.shields.io/badge/LLM-llama.cpp-orange)](README-LLAMACCPP.md)
 [![Neo4j](https://img.shields.io/badge/Graph-Neo4j-2081C3?logo=neo4j\&logoColor=white)](https://neo4j.com/)
 [![Python](https://img.shields.io/badge/Python-3.10+-yellow.svg)](https://www.python.org/)
+[![Publication](https://img.shields.io/badge/Peer--reviewed-ScienceDirect-brightgreen)](https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649)
 
 </div>
+
+---
+
+## Publication
+
+- Peer‑reviewed publication featuring the BioMed‑KAI platform:
+  - Read on ScienceDirect: https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649
+
+> If you cite this project, please reference the peer‑reviewed publication above.
 
 ---
 
