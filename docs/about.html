@@ -10,604 +10,382 @@ sitemap: false
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - BioMed-KAI</title>
     <meta name="description" content="Learn about the BioMed-KAI platform, team, and our mission to advance precision medicine through agentic AI.">
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
-            min-height: 100vh;
-        }
-
-        .nav-glass {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .card-light {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-
-        .card-light:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .team-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border-color: #3b82f6;
-        }
-
-        .timeline-item {
-            border-left: 4px solid #3b82f6;
-            padding-left: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            background: #3b82f6;
-            border-radius: 50%;
-        }
-
-        .nav-active {
-            color: #3b82f6;
-            border-bottom: 2px solid #3b82f6;
-        }
-
-        .feature-highlight {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
-            border: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        .icon-bg {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        .fade-in-delay {
-            animation-delay: 0.2s;
-        }
-
-        .fade-in-delay-2 {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .research-highlight {
-            background: linear-gradient(135deg, #fff7ed, #fef3c7);
-            border: 1px solid #f59e0b;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/site.css">
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="nav-glass fixed w-full top-0 z-50">
+    <header class="site-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-brain text-white text-lg"></i>
-                    </div>
+            <div class="flex items-center justify-between py-4">
+                <a href="index.html" class="flex items-center gap-3">
+                    <span class="brand-pill"><i class="fas fa-brain text-lg"></i></span>
                     <div>
-                        <h1 class="text-xl font-bold text-gray-900">BioMed-KAI</h1>
-                        <p class="text-xs text-gray-600">Showcase</p>
+                        <p class="text-sm font-semibold text-slate-500 uppercase tracking-wide">BioMed-KAI</p>
+                        <h1 class="text-xl font-bold text-slate-900">Platform Story</h1>
                     </div>
-                </div>
-                
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Home</a>
-                    <a href="analysis.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Analysis</a>
-                    <a href="sources.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Sources</a>
-                    <a href="about.html" class="nav-active px-3 py-2 text-sm font-medium transition-colors">About</a>
-                    <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">
-                        <i class="fab fa-github mr-1"></i>GitHub
-                    </a>
-                </div>
+                </a>
 
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-600 hover:text-blue-600">
-                        <i class="fas fa-bars text-lg"></i>
-                    </button>
-                </div>
+                <nav class="hidden md:flex items-center gap-2 desktop-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="analysis.html" class="nav-link">Analysis</a>
+                    <a href="sources.html" class="nav-link">Sources</a>
+                    <a href="about.html" class="nav-link active">About</a>
+                    <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="nav-link"><i class="fab fa-github mr-1"></i> GitHub</a>
+                </nav>
+
+                <button class="md:hidden text-slate-600" data-nav-toggle>
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
             </div>
 
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <div class="space-y-2">
-                    <a href="index.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Home</a>
-                    <a href="analysis.html" class="block px-3 py-2 text-blue-600 hover:text-blue-600">Analysis</a>
-                    <a href="sources.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Sources</a>
-                    <a href="about.html" class="block px-3 py-2 text-blue-600 font-medium">About</a>
-                    <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="block px-3 py-2 text-gray-600 hover:text-blue-600">
-                        <i class="fab fa-github mr-1"></i>GitHub
-                    </a>
-                </div>
+            <div class="mobile-nav hidden pb-4" data-mobile-nav>
+                <nav class="glass-panel rounded-2xl p-4 grid gap-2">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="analysis.html" class="nav-link">Analysis</a>
+                    <a href="sources.html" class="nav-link">Sources</a>
+                    <a href="about.html" class="nav-link active">About</a>
+                    <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="nav-link"><i class="fab fa-github mr-1"></i> GitHub</a>
+                </nav>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Header -->
-    <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-50 to-purple-50">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 fade-in">
-                About the BioMed-KAI Platform
-            </h1>
-            <p class="text-xl text-gray-600 mb-8 leading-relaxed fade-in-delay">
-                Pioneering the future of precision medicine through advanced agentic AI and 
-                intelligent knowledge graphs, built for real-world healthcare workflows
-            </p>
-            
-            <div class="research-highlight rounded-2xl p-6 fade-in-delay-2">
-                <div class="flex items-center justify-center mb-4">
-                    <i class="fas fa-rocket text-3xl text-orange-600 mr-3"></i>
-                    <div class="text-left">
-                        <h3 class="text-lg font-bold text-gray-900">Novel Platform</h3>
-                        <p class="text-sm text-gray-600">Purpose-built AI for Precision Medicine</p>
+    <main>
+        <!-- Hero -->
+        <section class="relative overflow-hidden pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+            <div class="pattern-dot -top-16 left-8 opacity-70"></div>
+            <div class="pattern-dot alt bottom-0 right-0 opacity-60"></div>
+
+            <div class="max-w-7xl mx-auto relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <span class="badge-soft brand"><i class="fas fa-rocket"></i> Novel precision medicine platform</span>
+                    <h2 class="section-title">About the BioMed-KAI Platform</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">BioMed-KAI is a purpose-built agentic AI platform that integrates retrieval-augmented reasoning with a dynamic biomedical knowledge graph. It is engineered for real-world clinical workflows, blending autonomous agents with verifiable evidence and peer-reviewed validation.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="chip"><i class="fas fa-users"></i> Multidisciplinary team</span>
+                        <span class="chip"><i class="fas fa-book"></i> Peer-reviewed</span>
+                        <span class="chip"><i class="fas fa-network-wired"></i> 200M+ graph edges</span>
                     </div>
                 </div>
-                <p class="text-gray-700">
-                    BioMed-KAI is a novel agentic AI platform that integrates dynamic knowledge graphs 
-                    with RAG-enhanced reasoning to deliver evidence-based insights for precision medicine.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Publications -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Publications</h2>
-                <p class="text-xl text-gray-600">Peer‑reviewed work featuring the BioMed‑KAI platform</p>
-            </div>
-            <div class="card-light rounded-2xl p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
-                <div class="icon-bg w-16 h-16 rounded-2xl flex items-center justify-center">
-                    <i class="fas fa-book-open text-2xl"></i>
-                </div>
-                <div class="flex-1">
-                    <div class="flex flex-wrap items-center gap-2 mb-2">
-                        <span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">Peer‑reviewed</span>
-                        <span class="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">ScienceDirect</span>
+                <div class="glass-panel rounded-3xl p-8 space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="pill-icon"><i class="fas fa-stethoscope text-xl"></i></div>
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-slate-500 font-semibold">Mission</p>
+                            <h3 class="text-2xl font-semibold text-slate-900">Transform precision medicine</h3>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-1">Featured Publication</h3>
-                    <p class="text-gray-600">
-                        The BioMed‑KAI platform has been published in a peer‑reviewed venue. Read the publication for methodology, results, and validation details.
-                    </p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <a href="https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649" target="_blank" 
-                       class="bg-gray-900 text-white px-5 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors inline-flex items-center">
-                        <i class="fas fa-external-link-alt mr-2"></i>
-                        Read on ScienceDirect
-                    </a>
-                    <button id="copy-bibtex" 
-                            class="border-2 border-gray-300 text-gray-700 px-5 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors inline-flex items-center">
-                        <i class="fas fa-copy mr-2"></i>
-                        Copy BibTeX
-                    </button>
+                    <p class="text-slate-600">Deliver evidence-grounded, real-time decision support while maintaining transparency and auditability. BioMed-KAI is crafted as a production-grade platform rather than a one-off research prototype.</p>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="glass-panel rounded-2xl p-4">
+                            <p class="text-sm uppercase text-slate-500 tracking-widest font-semibold">Focus areas</p>
+                            <p class="text-sm text-slate-600">Clinical reasoning, knowledge synthesis, translational research.</p>
+                        </div>
+                        <div class="glass-panel rounded-2xl p-4">
+                            <p class="text-sm uppercase text-slate-500 tracking-widest font-semibold">Collaboration</p>
+                            <p class="text-sm text-slate-600">Designed for hospitals, research labs, and industry partners.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 flex-wrap">
+                        <a href="https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649" target="_blank" class="btn-primary-gradient text-sm"><i class="fas fa-book-open"></i> Read publication</a>
+                        <a href="analysis.html" class="btn-outline text-sm"><i class="fas fa-chart-simple"></i> Review analysis</a>
+                    </div>
                 </div>
             </div>
-            <div class="mt-6 bg-white rounded-xl border">
-                <details class="p-6">
-                    <summary class="cursor-pointer text-sm text-gray-600">Show BibTeX</summary>
-                    <pre id="bibtex-entry" class="mt-4 p-4 rounded-lg bg-gray-50 overflow-x-auto text-sm text-gray-800">@misc{BioMedKAI2025,
+        </section>
+
+        <!-- Pillars -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/70">
+            <div class="max-w-7xl mx-auto space-y-10">
+                <div class="text-center">
+                    <h2 class="section-title">Why BioMed-KAI matters</h2>
+                    <p class="section-subtitle">The platform combines autonomy, biomedical grounding, and reproducibility to bridge the gap between research and clinical adoption.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-robot"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Autonomous, agentic AI</h3>
+                        <p class="text-sm text-slate-600">Coordinated agents perform evidence gathering, reasoning, and safety oversight with reflective cycles to improve answer quality.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-database"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Biomedical knowledge graph</h3>
+                        <p class="text-sm text-slate-600">A Neo4j-backed graph integrates 21 databases and 15 ontologies to ensure responses are grounded in curated biomedical data.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-check-circle"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Peer-reviewed & reproducible</h3>
+                        <p class="text-sm text-slate-600">The platform is documented in a peer-reviewed publication, and every experiment can be reproduced via the CLI and analysis portal.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8" id="team">
+            <div class="max-w-7xl mx-auto space-y-10">
+                <div class="text-center">
+                    <h2 class="section-title">Meet the team</h2>
+                    <p class="section-subtitle">A multidisciplinary group blending AI, medicine, and translational research expertise.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="glass-panel rounded-2xl p-6 text-center space-y-4">
+                        <div class="pill-icon w-16 h-16 text-2xl mx-auto"><i class="fas fa-user-graduate"></i></div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-slate-900">Madhavi Kumari</h3>
+                            <p class="text-sm font-semibold text-blue-600">Lead Researcher</p>
+                        </div>
+                        <p class="text-sm text-slate-600">Guides the research direction for applying agentic AI to precision medicine and biomedical knowledge integration.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 text-center space-y-4">
+                        <div class="pill-icon w-16 h-16 text-2xl mx-auto"><i class="fas fa-code"></i></div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-slate-900">Rohit Chauhan</h3>
+                            <p class="text-sm font-semibold text-green-600">Lead Data Scientist & Architect</p>
+                        </div>
+                        <p class="text-sm text-slate-600">Architects the agentic AI system, RAG infrastructure, and knowledge graph implementation for scalable deployments.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 text-center space-y-4">
+                        <div class="pill-icon w-16 h-16 text-2xl mx-auto"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-slate-900">Prof. Prabha Garg</h3>
+                            <p class="text-sm font-semibold text-purple-600">Strategic Advisor</p>
+                        </div>
+                        <p class="text-sm text-slate-600">Provides strategic oversight, ensuring alignment with healthcare innovation goals and clinical impact.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/70" id="timeline">
+            <div class="max-w-5xl mx-auto space-y-10">
+                <div class="text-center">
+                    <h2 class="section-title">Platform evolution</h2>
+                    <p class="section-subtitle">Milestones that shaped BioMed-KAI from foundational research to a validated platform.</p>
+                </div>
+                <div class="space-y-8">
+                    <div class="glass-panel rounded-2xl p-6 step-card">
+                        <h3 class="text-xl font-semibold text-slate-900">Phase 1: Foundation</h3>
+                        <p class="text-sm text-slate-600">Comprehensive literature review and challenge identification for biomedical knowledge integration.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 step-card">
+                        <h3 class="text-xl font-semibold text-slate-900">Phase 2: Knowledge graph</h3>
+                        <p class="text-sm text-slate-600">Neo4j-based graph built with 200M+ relationships spanning diseases, drugs, genes, and outcomes.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 step-card">
+                        <h3 class="text-xl font-semibold text-slate-900">Phase 3: Agentic intelligence</h3>
+                        <p class="text-sm text-slate-600">Agentic orchestration implemented with reflective learning and retrieval-augmented reasoning.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 step-card">
+                        <h3 class="text-xl font-semibold text-slate-900">Phase 4: Platform deployment</h3>
+                        <p class="text-sm text-slate-600">Production-ready platform shipped with FastAPI, WebSocket streaming, and Dockerized services.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical innovation -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8" id="innovation">
+            <div class="max-w-7xl mx-auto space-y-10">
+                <div class="text-center">
+                    <h2 class="section-title">Technical innovation</h2>
+                    <p class="section-subtitle">Breakthroughs that make BioMed-KAI a reliable, production-capable platform.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-robot"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Agentic AI architecture</h3>
+                        <p class="text-sm text-slate-600">Autonomous agents coordinate with self-reflection, adaptive routing, and case-specific planning.</p>
+                        <div class="pill-grid">
+                            <span><i class="fas fa-user-shield"></i> Safety orchestration</span>
+                            <span><i class="fas fa-brain"></i> Domain experts</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-search"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">RAG-enhanced reasoning</h3>
+                        <p class="text-sm text-slate-600">Dynamic retrieval ensures every generated answer is backed by structured biomedical evidence.</p>
+                        <div class="pill-grid">
+                            <span><i class="fas fa-database"></i> Context retrieval</span>
+                            <span><i class="fas fa-scroll"></i> Evidence chains</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-project-diagram"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Knowledge graph innovation</h3>
+                        <p class="text-sm text-slate-600">200M+ relationships across clinical, genomic, and pharmacological data ensure high-fidelity answers.</p>
+                        <div class="pill-grid">
+                            <span><i class="fas fa-vials"></i> Clinical pathways</span>
+                            <span><i class="fas fa-dna"></i> Genomic context</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-heartbeat"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Clinical integration</h3>
+                        <p class="text-sm text-slate-600">Interfaces, APIs, and observability features make it practical to embed BioMed-KAI into healthcare workflows.</p>
+                        <div class="pill-grid">
+                            <span><i class="fas fa-code"></i> FastAPI + WebSocket</span>
+                            <span><i class="fas fa-chart-line"></i> Monitoring</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publication -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/70" id="publication">
+            <div class="max-w-5xl mx-auto space-y-8">
+                <div class="text-center">
+                    <h2 class="section-title">Publications</h2>
+                    <p class="section-subtitle">Peer-reviewed work featuring the BioMed-KAI platform.</p>
+                </div>
+                <div class="publication-card glass-panel rounded-3xl p-8 md:p-10 flex flex-col md:flex-row gap-6 md:gap-10">
+                    <div class="pill-icon w-16 h-16 text-2xl"><i class="fas fa-book-open"></i></div>
+                    <div class="flex-1 space-y-4">
+                        <p class="text-sm uppercase tracking-wider text-slate-500 font-semibold">Featured publication</p>
+                        <p class="text-slate-600">The BioMed-KAI platform is documented in a peer-reviewed publication. Explore methodology, architecture, and validation to support collaborations.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="chip"><i class="fas fa-check"></i> Peer-reviewed</span>
+                            <span class="chip"><i class="fas fa-database"></i> Indexed</span>
+                            <span class="chip"><i class="fas fa-share"></i> Collaboration-ready</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <a href="https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649" target="_blank" class="btn-primary-gradient">
+                            <i class="fas fa-external-link-alt"></i> Read on ScienceDirect
+                        </a>
+                        <button class="btn-outline" data-copy-target="#bibtex-about">
+                            <i class="fas fa-copy"></i> Copy BibTeX
+                        </button>
+                    </div>
+                </div>
+                <div class="glass-panel rounded-2xl p-6">
+                    <details>
+                        <summary class="text-sm font-semibold text-slate-600 cursor-pointer">Show BibTeX</summary>
+                        <pre id="bibtex-about" class="mt-4 p-4 bg-slate-900/90 text-slate-100 rounded-xl text-sm overflow-x-auto">@misc{BioMedKAI2025,
   title        = {BioMed-KAI Platform},
   year         = {2025},
   note         = {Peer-reviewed publication describing the platform},
   howpublished = {\url{https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649}}
 }</pre>
-                </details>
+                    </details>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Mission & Vision -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-12">
-                <div class="card-light rounded-2xl p-8">
-                    <div class="icon-bg w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-bullseye text-2xl"></i>
+        <!-- Impact & roadmap -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8" id="impact">
+            <div class="max-w-6xl mx-auto space-y-10">
+                <div class="text-center">
+                    <h2 class="section-title">Impact & roadmap</h2>
+                    <p class="section-subtitle">Current contributions and upcoming initiatives that guide BioMed-KAI forward.</p>
+                </div>
+                <div class="glass-panel rounded-3xl p-8 space-y-6">
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <p class="text-3xl font-bold text-blue-600">Novel</p>
+                            <p class="text-sm text-slate-600">Agentic AI architecture for healthcare</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-green-600">Comprehensive</p>
+                            <p class="text-sm text-slate-600">Biomedical knowledge integration</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-purple-600">Scalable</p>
+                            <p class="text-sm text-slate-600">Precision Medicine Platform</p>
+                        </div>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        To revolutionize precision medicine by developing advanced agentic AI systems 
-                        that can autonomously analyze, reason, and collaborate to provide intelligent 
-                        healthcare decision support through comprehensive biomedical knowledge integration.
-                    </p>
-                    <div class="feature-highlight rounded-xl p-4">
-                        <ul class="text-sm text-gray-700 space-y-2">
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Advance AI in healthcare</li>
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Enable precision medicine</li>
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Support clinical decisions</li>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="glass-panel rounded-2xl p-6">
+                            <h3 class="text-lg font-semibold text-slate-900">Enhanced AI capabilities</h3>
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li>• Advanced multimodal reasoning</li>
+                                <li>• Deeper agent collaboration</li>
+                                <li>• Continual learning improvements</li>
+                            </ul>
+                        </div>
+                        <div class="glass-panel rounded-2xl p-6">
+                            <h3 class="text-lg font-semibold text-slate-900">Clinical applications</h3>
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li>• Real-world validation studies</li>
+                                <li>• Healthcare system integration</li>
+                                <li>• Patient outcome evaluation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to action -->
+        <section class="px-4 sm:px-6 lg:px-8 pb-20" id="cta">
+            <div class="max-w-6xl mx-auto cta-section p-12 md:p-16">
+                <div class="relative z-10 grid md:grid-cols-2 gap-10 items-center">
+                    <div class="space-y-4">
+                        <p class="badge-soft brand bg-white/10 text-white border border-white/30 uppercase text-xs tracking-widest">Get involved</p>
+                        <h2 class="text-3xl md:text-4xl font-bold">Collaborate with the BioMed-KAI team</h2>
+                        <p class="text-base text-white/80">Whether you're a researcher, clinician, or industry partner, the platform is ready for pilots, studies, and co-development.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="http://pitools.niper.ac.in/biomedkai/home" target="_blank" class="bg-white text-blue-700 px-6 py-3 rounded-xl font-semibold flex items-center gap-2 shadow-lg">
+                                <i class="fas fa-external-link-alt"></i> Explore platform
+                            </a>
+                            <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="border border-white/50 px-6 py-3 rounded-xl font-semibold flex items-center gap-2 text-white hover:bg-white/10">
+                                <i class="fab fa-github"></i> View repository
+                            </a>
+                        </div>
+                    </div>
+                    <div class="glass-panel bg-white/90 rounded-3xl p-8 text-slate-700">
+                        <h3 class="text-2xl font-semibold text-slate-900 mb-4">Ways to engage</h3>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li><i class="fas fa-circle text-xs text-emerald-400 mr-2"></i> Pilot deployments with your data</li>
+                            <li><i class="fas fa-circle text-xs text-emerald-400 mr-2"></i> Joint research and grant proposals</li>
+                            <li><i class="fas fa-circle text-xs text-emerald-400 mr-2"></i> Clinical workflow evaluations</li>
                         </ul>
-                    </div>
-                </div>
-
-                <div class="card-light rounded-2xl p-8">
-                    <div class="icon-bg w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-eye text-2xl"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Vision</h2>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        To create a future where AI agents work seamlessly alongside healthcare 
-                        professionals, providing real-time, evidence-based insights that improve 
-                        patient outcomes and accelerate medical research discovery.
-                    </p>
-                    <div class="feature-highlight rounded-xl p-4">
-                        <ul class="text-sm text-gray-700 space-y-2">
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Human-AI collaboration</li>
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Improved patient outcomes</li>
-                            <li><i class="fas fa-check text-blue-600 mr-2"></i>Accelerated research</li>
-                        </ul>
+                        <p class="text-xs text-slate-500 mt-6">Reach out via GitHub issues or through the publication channels for collaborations.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Research Team -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Team</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Our multidisciplinary team combines expertise in AI, medicine, and data science 
-                    to push the boundaries of what's possible in healthcare technology
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="team-card rounded-2xl p-8 text-center">
-                    <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-user-graduate text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Madhavi Kumari</h3>
-                    <p class="text-blue-600 font-medium mb-4">Lead Researcher</p>
-                    <p class="text-gray-600 text-sm leading-relaxed">
-                        Leading the research initiative in applying advanced AI methodologies 
-                        to precision medicine and biomedical knowledge integration.
-                    </p>
-                </div>
-
-                <div class="team-card rounded-2xl p-8 text-center">
-                    <div class="w-24 h-24 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-code text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Rohit Chauhan</h3>
-                    <p class="text-green-600 font-medium mb-4">Lead Data Scientist & Software Architect</p>
-                    <p class="text-gray-600 text-sm leading-relaxed">
-                        Architecting the agentic AI system, RAG infrastructure, and 
-                        knowledge graph implementation for scalable biomedical applications.
-                    </p>
-                </div>
-
-                <div class="team-card rounded-2xl p-8 text-center">
-                    <div class="w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-chalkboard-teacher text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Prof. Prabha Garg</h3>
-                    <p class="text-purple-600 font-medium mb-4">Project Guide</p>
-                    <p class="text-gray-600 text-sm leading-relaxed">
-                        Providing strategic guidance and academic oversight to ensure 
-                        research excellence and alignment with healthcare innovation goals.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Project Timeline -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Project Evolution</h2>
-                <p class="text-xl text-gray-600">
-                    Our journey in developing advanced agentic AI for precision medicine
-                </p>
-            </div>
-
-            <div class="space-y-8">
-                <div class="timeline-item">
-                    <div class="card-light rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Research Initiation</h3>
-                        <p class="text-sm text-blue-600 font-medium mb-3">Phase 1: Foundation</p>
-                        <p class="text-gray-600">
-                            Established the research framework for applying agentic AI to precision medicine. 
-                            Conducted comprehensive literature review and identified key challenges in 
-                            biomedical knowledge integration.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="card-light rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Knowledge Graph Development</h3>
-                        <p class="text-sm text-blue-600 font-medium mb-3">Phase 2: Infrastructure</p>
-                        <p class="text-gray-600">
-                            Built comprehensive knowledge graph integrating 21 databases and 15 ontologies. 
-                            Developed Neo4j-based architecture with 200M+ medical relationships for 
-                            semantic biomedical knowledge representation.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="card-light rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Agentic AI Implementation</h3>
-                        <p class="text-sm text-blue-600 font-medium mb-3">Phase 3: Intelligence</p>
-                        <p class="text-gray-600">
-                            Implemented multi-agent system with RAG-enhanced capabilities. 
-                            Developed autonomous AI agents capable of collaborative reasoning, 
-                            self-reflection, and continuous learning in biomedical domains.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="card-light rounded-xl p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Platform Integration</h3>
-                        <p class="text-sm text-blue-600 font-medium mb-3">Phase 4: Deployment</p>
-                        <p class="text-gray-600">
-                            Deployed production-ready platform with real-time inference capabilities. 
-                            Integrated Docker containerization, scalable architecture, and 
-                            user-friendly interfaces for healthcare professionals.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Technical Innovation -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Technical Innovation</h2>
-                <p class="text-xl text-gray-600">
-                    Breakthrough technologies advancing the field of AI in healthcare
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="card-light rounded-2xl p-8">
-                    <div class="icon-bg w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-robot text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Agentic AI Architecture</h3>
-                    <p class="text-gray-600 mb-4">
-                        Novel implementation of autonomous AI agents that can plan, collaborate, 
-                        and learn from medical data interactions.
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Multi-agent coordination</li>
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Self-reflective learning</li>
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Autonomous planning</li>
-                    </ul>
-                </div>
-
-                <div class="card-light rounded-2xl p-8">
-                    <div class="icon-bg w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-search-plus text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">RAG-Enhanced Intelligence</h3>
-                    <p class="text-gray-600 mb-4">
-                        Advanced retrieval-augmented generation system providing context-aware 
-                        responses grounded in comprehensive medical literature.
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Dynamic knowledge retrieval</li>
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Context-aware generation</li>
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Semantic search capabilities</li>
-                    </ul>
-                </div>
-
-                <div class="card-light rounded-2xl p-8">
-                    <div class="icon-bg w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-project-diagram text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Knowledge Graph Innovation</h3>
-                    <p class="text-gray-600 mb-4">
-                        Comprehensive biomedical knowledge graph with real-time updates 
-                        and semantic relationship modeling.
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>200M+ medical relationships</li>
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Real-time data integration</li>
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Semantic reasoning</li>
-                    </ul>
-                </div>
-
-                <div class="card-light rounded-2xl p-8">
-                    <div class="icon-bg w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-stethoscope text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Clinical Integration</h3>
-                    <p class="text-gray-600 mb-4">
-                        Seamless integration with healthcare workflows providing 
-                        intelligent decision support for precision medicine.
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Clinical decision support</li>
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Workflow integration</li>
-                        <li><i class="fas fa-cog text-blue-600 mr-2"></i>Evidence-based insights</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Impact & Future -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8">Impact & Roadmap</h2>
-            
-            <div class="card-light rounded-2xl p-8 mb-8">
-                <h3 class="text-xl font-bold text-gray-900 mb-4">Current Contributions</h3>
-                <div class="grid md:grid-cols-3 gap-6 text-center">
+    <footer class="footer py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-2 space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="brand-pill"><i class="fas fa-brain text-lg"></i></span>
                     <div>
-                        <div class="text-3xl font-bold text-blue-600 mb-2">Novel</div>
-                        <div class="text-sm text-gray-600">Agentic AI Architecture for Healthcare</div>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-bold text-green-600 mb-2">Comprehensive</div>
-                        <div class="text-sm text-gray-600">Biomedical Knowledge Integration</div>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-bold text-purple-600 mb-2">Scalable</div>
-                        <div class="text-sm text-gray-600">Precision Medicine Platform</div>
+                        <p class="text-sm uppercase tracking-wide text-slate-200/80">BioMed-KAI Platform</p>
+                        <h3 class="text-lg font-semibold text-white">Agentic AI for precision medicine</h3>
                     </div>
                 </div>
+                <p class="text-sm text-slate-200/80 leading-relaxed">Built as a novel tool for precision medicine, BioMed-KAI merges autonomous agents with biomedical knowledge graphs and peer-reviewed validation.</p>
+                <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold"><i class="fab fa-github text-lg"></i> GitHub repository</a>
             </div>
-
-            <div class="feature-highlight rounded-2xl p-8">
-                <h3 class="text-xl font-bold text-gray-900 mb-4">Roadmap</h3>
-                <div class="grid md:grid-cols-2 gap-6 text-left">
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Enhanced AI Capabilities</h4>
-                        <ul class="text-sm text-gray-600 space-y-1">
-                            <li>• Advanced multi-modal reasoning</li>
-                            <li>• Improved agent collaboration</li>
-                            <li>• Enhanced learning algorithms</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Clinical Applications</h4>
-                        <ul class="text-sm text-gray-600 space-y-1">
-                            <li>• Real-world validation studies</li>
-                            <li>• Healthcare system integration</li>
-                            <li>• Patient outcome evaluation</li>
-                        </ul>
-                    </div>
-                </div>
+            <div>
+                <h4 class="font-semibold text-white mb-3">Explore</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="analysis.html">Analysis hub</a></li>
+                    <li><a href="sources.html">Sources catalog</a></li>
+                    <li><a href="analysis/static/">Figure gallery</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-3">Engage</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649" target="_blank">Publication</a></li>
+                    <li><a href="http://pitools.niper.ac.in/biomedkai/home" target="_blank">Live platform</a></li>
+                    <li><a href="https://github.com/chemplusx/BioMed-KAI/blob/master/README.md" target="_blank">Documentation</a></li>
+                </ul>
             </div>
         </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-700">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-                Explore the BioMed-KAI Platform
-            </h2>
-            <p class="text-xl text-blue-100 mb-8">
-                Try the live platform, collaborate with our team, or contribute to the codebase
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="http://pitools.niper.ac.in/biomedkai/home" target="_blank" 
-                   class="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center">
-                    <i class="fas fa-external-link-alt mr-3"></i>
-                    Explore Platform
-                </a>
-                <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" 
-                   class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-blue-600 transition-colors inline-flex items-center justify-center">
-                    <i class="fab fa-github mr-3"></i>
-                    View Source Code
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-white py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto text-center">
-            <div class="flex items-center justify-center space-x-3 mb-4">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-brain text-white"></i>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold text-gray-900">BioMed-KAI Platform</h3>
-                    <p class="text-sm text-gray-600">Advancing Precision Medicine</p>
-                </div>
-            </div>
-            <p class="text-gray-600 mb-4">
-                Pioneering agentic AI for healthcare through collaborative research and innovation
-            </p>
-            <div class="flex justify-center space-x-4">
-                <a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
-                <a href="sources.html" class="text-gray-600 hover:text-blue-600 transition-colors">Sources</a>
-                <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="text-gray-600 hover:text-blue-600 transition-colors">GitHub</a>
-            </div>
-        </div>
+        <div class="border-t border-white/10 mt-10 pt-6 text-center text-xs text-slate-200/60">&copy; 2025 BioMed-KAI Platform. Advancing precision medicine through agentic AI.</div>
     </footer>
 
-    <script>
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe fade-in elements
-        document.querySelectorAll('.fade-in, .fade-in-delay, .fade-in-delay-2').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Copy BibTeX
-        const copyBtn = document.getElementById('copy-bibtex');
-        if (copyBtn) {
-            copyBtn.addEventListener('click', async () => {
-                const bib = document.getElementById('bibtex-entry')?.innerText || '';
-                try {
-                    await navigator.clipboard.writeText(bib);
-                    copyBtn.textContent = 'Copied!';
-                    setTimeout(() => { copyBtn.textContent = 'Copy BibTeX'; }, 1400);
-                } catch (e) {
-                    alert('Copy failed. Please select and copy manually.');
-                }
-            });
-        }
-    </script>
+    <script src="assets/js/site.js"></script>
 </body>
 
 </html>
