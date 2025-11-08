@@ -10,537 +10,366 @@ sitemap: false
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analysis Results - BioMed-KAI</title>
     <meta name="description" content="BioMed-KAI analysis results: comprehensive statistical validation, interactive dashboards, and performance metrics.">
-    
-    <!-- Consistent styling with main site -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* Consistent styling with main site */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
-            min-height: 100vh;
-        }
-
-        .nav-glass {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .card-light {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-
-        .card-light:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-        }
-
-        .stat-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
-        }
-
-        .icon-container {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
-        }
-
-        .nav-active {
-            color: #3b82f6;
-            border-bottom: 2px solid #3b82f6;
-        }
-
-        /* Interactive dashboard styling */
-        .dashboard-container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-            overflow: hidden;
-        }
-
-        .dashboard-header {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            padding: 1.5rem;
-        }
-
-        .analysis-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
-
-        @media (max-width: 768px) {
-            .analysis-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/site.css">
 </head>
 
 <body>
-    <!-- Navigation - matching your main site -->
-    <nav class="nav-glass fixed w-full top-0 z-50">
+    <header class="site-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-brain text-white text-lg"></i>
+            <div class="flex items-center justify-between py-4">
+                <a href="index.html" class="flex items-center gap-3">
+                    <span class="brand-pill"><i class="fas fa-brain text-lg"></i></span>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-500 uppercase tracking-wide">BioMed-KAI</p>
+                        <h1 class="text-xl font-bold text-slate-900">Analysis Hub</h1>
+                    </div>
+                </a>
+
+                <nav class="hidden md:flex items-center gap-2 desktop-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="analysis.html" class="nav-link active">Analysis</a>
+                    <a href="sources.html" class="nav-link">Sources</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="nav-link">
+                        <i class="fab fa-github mr-1"></i> GitHub
+                    </a>
+                </nav>
+
+                <button class="md:hidden text-slate-600" data-nav-toggle>
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+
+            <div class="mobile-nav hidden pb-4" data-mobile-nav>
+                <nav class="glass-panel rounded-2xl p-4 grid gap-2">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="analysis.html" class="nav-link active">Analysis</a>
+                    <a href="sources.html" class="nav-link">Sources</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="nav-link">
+                        <i class="fab fa-github mr-1"></i> GitHub
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="relative overflow-hidden pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+            <div class="pattern-dot -top-12 left-10 opacity-70"></div>
+            <div class="pattern-dot alt bottom-0 right-0 opacity-60"></div>
+
+            <div class="max-w-7xl mx-auto relative z-10 space-y-8">
+                <div class="flex flex-wrap gap-3 items-center">
+                    <span class="badge-soft brand"><i class="fas fa-chart-line"></i> Analysis Suite</span>
+                    <a href="#interactive" class="badge-soft neutral">Interactive explorer</a>
+                    <a href="#validation" class="badge-soft neutral">Validation</a>
+                    <a href="#resources" class="badge-soft neutral">Resources</a>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12 items-start">
+                    <div class="space-y-6">
+                        <h2 class="section-title leading-tight">Performance insights & reproducible validation</h2>
+                        <p class="text-lg text-slate-600 leading-relaxed">
+                            Explore ablations, comparative benchmarks, and statistical validation from the BioMed-KAI platform. Interactive dashboards and publication-ready figures are available inline so you can review accuracy uplifts, error profiles, and parameter sensitivities without leaving this page.
+                        </p>
+                        <div class="glass-panel rounded-2xl p-5 grid sm:grid-cols-3 gap-4">
+                            <div>
+                                <p class="text-sm uppercase text-slate-500 tracking-widest font-semibold">Diagnostic accuracy</p>
+                                <p class="text-2xl font-bold text-slate-900">85.7%</p>
+                            </div>
+                            <div>
+                                <p class="text-sm uppercase text-slate-500 tracking-widest font-semibold">Token efficiency</p>
+                                <p class="text-2xl font-bold text-slate-900">66.5%</p>
+                            </div>
+                            <div>
+                                <p class="text-sm uppercase text-slate-500 tracking-widest font-semibold">CARE-RAG uplift</p>
+                                <p class="text-2xl font-bold text-slate-900">39.3%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-3xl p-8 space-y-6">
+                        <div class="flex items-center gap-3">
+                            <div class="pill-icon"><i class="fas fa-lightbulb text-xl"></i></div>
+                            <div>
+                                <p class="text-sm uppercase tracking-wider text-slate-500 font-semibold">What you'll find</p>
+                                <h3 class="text-xl font-semibold text-slate-900">Evidence snapshots</h3>
+                            </div>
+                        </div>
+                        <ul class="text-slate-600 space-y-3">
+                            <li><i class="fas fa-check text-blue-500 mr-2"></i> Multi-agent benchmarking against baseline orchestration</li>
+                            <li><i class="fas fa-check text-blue-500 mr-2"></i> Error taxonomies with mitigation strategies and recovery rates</li>
+                            <li><i class="fas fa-check text-blue-500 mr-2"></i> Temperature and sampling sensitivity analyses with 3D visualizations</li>
+                            <li><i class="fas fa-check text-blue-500 mr-2"></i> Static gallery of publication-ready figures and architecture diagrams</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="#interactive" class="btn-primary-gradient text-sm"><i class="fas fa-play-circle"></i> Launch Explorer</a>
+                            <a href="#insights" class="btn-outline text-sm"><i class="fas fa-pen"></i> Key insights</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick navigation -->
+        <!-- <section class="px-4 sm:px-6 lg:px-8 pb-8">
+            <div class="max-w-4xl mx-auto glass-panel rounded-2xl p-5 flex flex-col sm:flex-row sm:justify-end sm:items-start gap-4">
+                <div class="sm:text-right sm:self-end">
+                    <p class="text-sm font-semibold text-slate-600">Navigate</p>
+                </div>
+                <nav class="mini-nav vertical sm:self-end">
+                    <a href="#interactive" class="active">Interactive</a>
+                    <a href="#insights">Insights</a>
+                    <a href="#validation">Validation</a>
+                    <a href="#resources">Resources</a>
+                </nav>
+            </div>
+        </section> -->
+
+        <!-- Interactive Explorer -->
+        <section id="interactive" class="py-16 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto space-y-10">
+                <div class="grid lg:grid-cols-2 gap-10 items-start">
+                    <div class="space-y-4">
+                        <span class="badge-soft brand"><i class="fas fa-window-restore"></i> Interactive explorer</span>
+                        <div class="glass-panel rounded-2xl p-5 flex flex-col gap-3">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="chip"><i class="fas fa-robot"></i> Agent analysis</span>
+                                <span class="chip"><i class="fas fa-bug"></i> Error taxonomy</span>
+                                <span class="chip"><i class="fas fa-temperature-high"></i> Temperature sweep</span>
+                            </div>
+                            <p class="text-sm text-slate-500">Need a bigger workspace? Use the buttons to open each dashboard in a new tab or toggle the iframe into 85vh full-screen mode.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4"style="margin-top: 2.6rem;">
+                        <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+                            <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-blue-600 text-white" data-target="#tab-performance">Performance</button>
+                            <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-white text-gray-700" data-target="#tab-error">Error Analysis</button>
+                            <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-white text-gray-700" data-target="#tab-temperature">Temperature</button>
+                        </div>
+                        <div class="glass-panel rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+                            <div class="text-xs uppercase tracking-widest font-semibold text-slate-500">Controls</div>
+                            <div class="flex items-center gap-2">
+                                <a id="open-new-tab" href="analysis/interactive/interactive_dashboard.html" target="_blank" class="btn-outline text-xs">
+                                    <i class="fas fa-arrow-up-right-from-square"></i> Open in new tab
+                                </a>
+                                <button id="toggle-fullscreen" class="btn-primary-gradient text-xs">
+                                    <i class="fas fa-expand"></i> Fullscreen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="viewer" class="glass-panel rounded-3xl overflow-hidden border">
+                    <div id="tab-performance" class="tab-pane hidden">
+                        <iframe src="analysis/interactive/interactive_dashboard.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
+                    </div>
+                    <div id="tab-error" class="tab-pane hidden">
+                        <iframe src="analysis/interactive/interactive_error_analysis.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
+                    </div>
+                    <div id="tab-temperature" class="tab-pane hidden">
+                        <iframe src="analysis/interactive/interactive_temperature_analysis.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights -->
+        <section id="insights" class="py-16 px-4 sm:px-6 lg:px-8 bg-white/70">
+            <div class="max-w-7xl mx-auto space-y-10">
+                <div class="text-center">
+                    <h2 class="section-title">Highlights & key takeaways</h2>
+                    <p class="section-subtitle">Summaries of the most impactful results from the benchmarking, error analysis, and optimization studies.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <div class="glass-panel rounded-2xl p-6 space-y-4">
+                        <span class="chip"><i class="fas fa-gauge-high"></i> Performance</span>
+                        <h3 class="text-xl font-semibold text-slate-900">CARE-RAG delivers 39.3% uplift</h3>
+                        <p class="text-slate-600 text-sm">Agent accuracy improves significantly with the CARE-RAG pipeline, particularly for complex, multi-hop questions that demand graph-backed reasoning. Bootstrap sampling confirms consistent gains across 10,000 iterations.</p>
+                        <a href="analysis/interactive/interactive_dashboard.html" target="_blank" class="text-sm font-semibold text-blue-600 inline-flex items-center gap-2">Inspect dashboard <i class="fas fa-arrow-up-right-from-square"></i></a>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-6 space-y-4">
+                        <span class="chip"><i class="fas fa-bug"></i> Error mitigation</span>
+                        <h3 class="text-xl font-semibold text-slate-900">Failure patterns are recoverable</h3>
+                        <p class="text-slate-600 text-sm">Error clustering reveals three dominant failure categories. Intervention with safety and reflection agents recovers 67% of cases, reducing severe failure modes to single digits.</p>
+                        <a href="analysis/interactive/interactive_error_analysis.html" target="_blank" class="text-sm font-semibold text-blue-600 inline-flex items-center gap-2">Explore recovery paths <i class="fas fa-arrow-up-right-from-square"></i></a>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-6 space-y-4">
+                        <span class="chip"><i class="fas fa-temperature-high"></i> Optimization</span>
+                        <h3 class="text-xl font-semibold text-slate-900">Temperature sweet spot identified</h3>
+                        <p class="text-slate-600 text-sm">3D sensitivity analysis highlights a stable band (0.18–0.24) where factuality and creativity remain balanced. Out-of-band temperatures degrade both token efficiency and citation adherence.</p>
+                        <a href="analysis/interactive/interactive_temperature_analysis.html" target="_blank" class="text-sm font-semibold text-blue-600 inline-flex items-center gap-2">View 3D sweeps <i class="fas fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-3xl p-8 grid md:grid-cols-3 gap-6">
+                    <div>
+                        <p class="text-sm uppercase tracking-widest font-semibold text-slate-500">Power analysis</p>
+                        <p class="text-slate-600 text-sm">Effect sizes measured via Cohen's d confirm meaningful improvements across accuracy, latency, and citation adherence.</p>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-gray-900">BioMed-KAI</h1>
-                        <p class="text-xs text-gray-600">Analysis</p>
+                        <p class="text-sm uppercase tracking-widest font-semibold text-slate-500">Comparative baselines</p>
+                        <p class="text-slate-600 text-sm">Benchmarks include single-agent RAG, rule-based retrieval, and large language model baselines without graph augmentation.</p>
+                    </div>
+                    <div>
+                        <p class="text-sm uppercase tracking-widest font-semibold text-slate-500">Agent reflections</p>
+                        <p class="text-slate-600 text-sm">Qualitative notes from reflective episodes are captured and can be exported from the CLI artifacts for audit trails.</p>
                     </div>
                 </div>
-                
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Home</a>
-                    <a href="analysis.html" class="nav-active px-3 py-2 text-sm font-medium transition-colors">Analysis</a>
-                    <a href="sources.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Sources</a>
-                    <a href="about.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">About</a>
-                    <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">
-                        <i class="fab fa-github mr-1"></i>GitHub
-                    </a>
-                </div>
+            </div>
+        </section>
 
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-600 hover:text-blue-600">
-                        <i class="fas fa-bars text-lg"></i>
-                    </button>
+        <!-- Static Gallery -->
+        <section class="py-16 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto space-y-6">
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900">Static gallery</h3>
+                        <p class="text-sm text-slate-500">Publication-ready figures, architecture diagrams, and statistical plots.</p>
+                    </div>
+                    <a href="analysis/static/" class="btn-outline text-sm"><i class="fas fa-image"></i> View all figures</a>
+                </div>
+                <div class="grid gap-4 grid-cols-2 md:grid-cols-4">
+                    <img src="analysis/static/care_rag_architecture.png" alt="CARE-RAG Architecture" class="rounded-xl border cursor-zoom-in gallery-item">
+                    <img src="analysis/static/comparison_analysis.png" alt="Comparison Analysis" class="rounded-xl border cursor-zoom-in gallery-item">
+                    <img src="analysis/static/statistical_validation.png" alt="Statistical Validation" class="rounded-xl border cursor-zoom-in gallery-item">
+                    <img src="analysis/static/temperature_3d.png" alt="3D Temperature" class="rounded-xl border cursor-zoom-in gallery-item">
                 </div>
             </div>
+        </section>
 
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <div class="space-y-2">
-                    <a href="index.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Home</a>
-                    <a href="analysis.html" class="block px-3 py-2 text-blue-600 font-medium">Analysis</a>
-                    <a href="sources.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Sources</a>
-                    <a href="about.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">About</a>
-                    <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="block px-3 py-2 text-gray-600 hover:text-blue-600">
-                        <i class="fab fa-github mr-1"></i>GitHub
-                    </a>
+        <!-- Validation -->
+        <section id="validation" class="py-16 px-4 sm:px-6 lg:px-8 bg-white/70">
+            <div class="max-w-7xl mx-auto space-y-10">
+                <div class="text-center">
+                    <h2 class="section-title">Validation & reproducibility</h2>
+                    <p class="section-subtitle">Statistical methodology and reproducibility practices underpinning BioMed-KAI.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-panel rounded-2xl p-8 space-y-4">
+                        <h3 class="text-2xl font-bold text-slate-900">Statistical framework</h3>
+                        <ul class="space-y-3 text-slate-600">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-blue-600 mr-3 mt-0.5"></i>
+                                <span>Bootstrap validation with 10,000 iterations</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-blue-600 mr-3 mt-0.5"></i>
+                                <span>Multiple comparison correction (Benjamini-Hochberg)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-blue-600 mr-3 mt-0.5"></i>
+                                <span>Effect size calculation (Cohen's d)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-blue-600 mr-3 mt-0.5"></i>
+                                <span>Power analysis and sample size validation</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-8 space-y-6">
+                        <h3 class="text-2xl font-bold text-slate-900">Reproducibility</h3>
+                        <p class="text-slate-600">All analysis scripts and data are openly available. The CLI mirrors behaviour from the web service, enabling headless evaluation and artifact capture for auditing.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="btn-primary-gradient text-sm"><i class="fab fa-github"></i> View code</a>
+                            <a href="https://github.com/chemplusx/BioMed-KAI/releases" target="_blank" class="btn-outline text-sm"><i class="fas fa-download"></i> Download data</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
+
+        <!-- Resources -->
+        <section id="resources" class="py-16 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto space-y-8">
+                <div class="text-center">
+                    <h2 class="section-title">Resources & next steps</h2>
+                    <p class="section-subtitle">Everything you need to continue exploring BioMed-KAI.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-book"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Publication</h3>
+                        <p class="text-sm text-slate-600">Read the peer-reviewed paper on ScienceDirect for methodology and results.</p>
+                        <a href="https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649" target="_blank" class="text-sm font-semibold text-blue-600 inline-flex items-center gap-2">Read the paper <i class="fas fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-database"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Knowledge sources</h3>
+                        <p class="text-sm text-slate-600">Browse the 21 databases and 15 ontologies powering the knowledge graph.</p>
+                        <a href="sources.html" class="text-sm font-semibold text-blue-600 inline-flex items-center gap-2">Explore catalog <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 space-y-3">
+                        <div class="pill-icon w-12 h-12 text-lg"><i class="fas fa-code"></i></div>
+                        <h3 class="text-lg font-semibold text-slate-900">Repository</h3>
+                        <p class="text-sm text-slate-600">Clone the repository, run the CLI, or deploy the full stack in your environment.</p>
+                        <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="text-sm font-semibold text-blue-600 inline-flex items-center gap-2">Open GitHub <i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox -->
+        <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50">
+            <button id="lightbox-close" class="absolute top-6 right-6 text-white text-xl p-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-20">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="lightbox-image" src="" alt="" class="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl border">
+            <div id="lightbox-caption" class="absolute bottom-6 text-white text-sm opacity-80"></div>
         </div>
-    </nav>
+    </main>
 
-    <!-- Hero Section -->
-    <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h1 class="text-5xl font-bold text-gray-900 mb-6">
-                    Analysis <span class="text-blue-600">Results</span>
-                </h1>
-                <p class="text-xl text-gray-600 mb-4 max-w-3xl mx-auto">
-                    Comprehensive statistical validation and performance analysis of the BioMed-KAI system
+    <footer class="footer py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-2 space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="brand-pill"><i class="fas fa-brain text-lg"></i></span>
+                    <div>
+                        <p class="text-sm uppercase tracking-wide text-slate-200/80">BioMed-KAI Analysis</p>
+                        <h3 class="text-lg font-semibold text-white">Quantitative evidence for precision medicine</h3>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-200/80 leading-relaxed">
+                    Explore dashboards, figures, and methodology that quantify the impact of BioMed-KAI's agentic reasoning and knowledge graph pipeline.
                 </p>
-                <p class="text-lg text-gray-500 max-w-4xl mx-auto leading-relaxed">
-                    Complete ablation studies, comparative benchmarks, and interactive visualizations 
-                    from our platform evaluation suite with statistical significance testing
-                </p>
+                <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold">
+                    <i class="fab fa-github text-lg"></i> GitHub repository
+                </a>
             </div>
-
-            <!-- Key Metrics -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-                <div class="stat-card text-center p-6 rounded-2xl">
-                    <div class="icon-container w-12 h-12 mx-auto mb-4">
-                        <i class="fas fa-bullseye text-xl"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-gray-900 mb-2">85.7%</div>
-                    <div class="text-sm text-gray-600">Diagnostic Accuracy</div>
-                </div>
-                
-                <div class="stat-card text-center p-6 rounded-2xl">
-                    <div class="icon-container w-12 h-12 mx-auto mb-4">
-                        <i class="fas fa-tachometer-alt text-xl"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-gray-900 mb-2">66.5%</div>
-                    <div class="text-sm text-gray-600">Token Efficiency</div>
-                </div>
-                
-                <div class="stat-card text-center p-6 rounded-2xl">
-                    <div class="icon-container w-12 h-12 mx-auto mb-4">
-                        <i class="fas fa-chart-line text-xl"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-gray-900 mb-2">39.3%</div>
-                    <div class="text-sm text-gray-600">CARE-RAG Improvement</div>
-                </div>
-                
-                <div class="stat-card text-center p-6 rounded-2xl">
-                    <div class="icon-container w-12 h-12 mx-auto mb-4">
-                        <i class="fas fa-certificate text-xl"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-gray-900 mb-2">p < 0.001</div>
-                    <div class="text-sm text-gray-600">Statistical Significance</div>
-                </div>
+            <div>
+                <h4 class="font-semibold text-white mb-3">Interactive</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="analysis/interactive/interactive_dashboard.html" target="_blank">Performance dashboard</a></li>
+                    <li><a href="analysis/interactive/interactive_error_analysis.html" target="_blank">Error analysis</a></li>
+                    <li><a href="analysis/interactive/interactive_temperature_analysis.html" target="_blank">Temperature analysis</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-3">Resources</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="analysis/static/">Static figures</a></li>
+                    <li><a href="sources.html">Knowledge sources</a></li>
+                    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S1566253525009649" target="_blank">Publication</a></li>
+                </ul>
             </div>
         </div>
-    </section>
-
-    <!-- Interactive Dashboards -->
-    <section class="py-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Interactive Analysis Dashboards</h2>
-                <p class="text-xl text-gray-600">Explore our comprehensive analysis results through interactive visualizations</p>
-            </div>
-
-            <div class="analysis-grid">
-                <!-- Performance Dashboard -->
-                <div class="card-light rounded-2xl overflow-hidden">
-                    <div class="dashboard-header">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                                <i class="fas fa-chart-bar text-white text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold">Performance Dashboard</h3>
-                                <p class="text-blue-100">Agent performance and CARE-RAG analysis</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-gray-600 mb-6">
-                            Interactive overview of all system performance metrics, agent comparisons, 
-                            and CARE-RAG ablation results with statistical validation.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Agent Analysis</span>
-                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Performance Metrics</span>
-                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Statistical Tests</span>
-                        </div>
-                        <a href="analysis/interactive/interactive_dashboard.html" 
-                           class="btn-primary px-6 py-3 rounded-xl font-semibold inline-flex items-center">
-                            <i class="fas fa-external-link-alt mr-2"></i>
-                            View Dashboard
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Error Analysis -->
-                <div class="card-light rounded-2xl overflow-hidden">
-                    <div class="dashboard-header">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                                <i class="fas fa-exclamation-triangle text-white text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold">Error Analysis</h3>
-                                <p class="text-blue-100">Failure patterns and recovery strategies</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-gray-600 mb-6">
-                            Comprehensive analysis of error patterns, recovery rates, and mitigation strategies 
-                            with interactive bubble charts and severity scoring.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Error Patterns</span>
-                            <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Recovery Rates</span>
-                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Mitigation</span>
-                        </div>
-                        <a href="analysis/interactive/interactive_error_analysis.html" 
-                           class="btn-primary px-6 py-3 rounded-xl font-semibold inline-flex items-center">
-                            <i class="fas fa-external-link-alt mr-2"></i>
-                            View Analysis
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Temperature Analysis -->
-                <div class="card-light rounded-2xl overflow-hidden">
-                    <div class="dashboard-header">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                                <i class="fas fa-thermometer-half text-white text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold">Temperature Analysis</h3>
-                                <p class="text-blue-100">Sensitivity and optimization results</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-gray-600 mb-6">
-                            3D visualization of temperature optimization and performance sensitivity analysis 
-                            with multi-dimensional parameter exploration.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">3D Analysis</span>
-                            <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm">Optimization</span>
-                            <span class="bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full text-sm">Sensitivity</span>
-                        </div>
-                        <a href="analysis/interactive/interactive_temperature_analysis.html" 
-                           class="btn-primary px-6 py-3 rounded-xl font-semibold inline-flex items-center">
-                            <i class="fas fa-external-link-alt mr-2"></i>
-                            View Analysis
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Static Visualizations -->
-                <div class="card-light rounded-2xl overflow-hidden">
-                    <div class="dashboard-header">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                                <i class="fas fa-images text-white text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold">Static Visualizations</h3>
-                                <p class="text-blue-100">Publication-ready figures and charts</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-gray-600 mb-6">
-                            High-resolution static visualizations including architecture diagrams, 
-                            performance comparisons, and statistical validation plots.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">Architecture</span>
-                            <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm">Comparisons</span>
-                            <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm">Statistics</span>
-                        </div>
-                        <a href="analysis/static/" 
-                           class="btn-primary px-6 py-3 rounded-xl font-semibold inline-flex items-center">
-                            <i class="fas fa-external-link-alt mr-2"></i>
-                            View Gallery
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Inline Exploration -->
-    <section id="explore" class="py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Explore Inline</h2>
-                <p class="text-gray-600">Switch between dashboards without leaving this page</p>
-            </div>
-
-            <!-- Tabs -->
-            <div class="flex flex-wrap gap-2 justify-center mb-6">
-                <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-blue-600 text-white" data-target="#tab-performance">Performance</button>
-                <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-white text-gray-700 hover:border-blue-300" data-target="#tab-error">Error Analysis</button>
-                <button class="px-4 py-2 rounded-xl border text-sm font-semibold tab-btn bg-white text-gray-700 hover:border-blue-300" data-target="#tab-temperature">Temperature</button>
-            </div>
-
-            <!-- Toolbar -->
-            <div class="flex items-center justify-between bg-white border rounded-xl px-4 py-3 mb-3">
-                <div class="text-sm text-gray-600">
-                    Interactive viewer • Use the buttons on the right to open in a new tab or toggle fullscreen
-                </div>
-                <div class="flex items-center gap-2">
-                    <a id="open-new-tab" href="analysis/interactive/interactive_dashboard.html" target="_blank" class="px-3 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm inline-flex items-center">
-                        <i class="fas fa-external-link-alt mr-2"></i>Open in new tab
-                    </a>
-                    <button id="toggle-fullscreen" class="px-3 py-2 rounded-lg bg-gray-900 text-white hover:bg-gray-800 text-sm inline-flex items-center">
-                        <i class="fas fa-expand mr-2"></i>Fullscreen
-                    </button>
-                </div>
-            </div>
-
-            <!-- Iframe Containers -->
-            <div id="viewer" class="dashboard-container rounded-2xl border">
-                <div id="tab-performance" class="tab-pane">
-                    <iframe src="analysis/interactive/interactive_dashboard.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
-                </div>
-                <div id="tab-error" class="tab-pane hidden">
-                    <iframe src="analysis/interactive/interactive_error_analysis.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
-                </div>
-                <div id="tab-temperature" class="tab-pane hidden">
-                    <iframe src="analysis/interactive/interactive_temperature_analysis.html" class="w-full" style="height: 640px;" loading="lazy"></iframe>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quick Gallery -->
-    <section class="py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-2xl font-bold text-gray-900">Static Gallery</h3>
-                <a href="analysis/static/" class="text-blue-600 hover:underline text-sm font-semibold">View all</a>
-            </div>
-            <div class="grid gap-4 grid-cols-2 md:grid-cols-4">
-                <img src="analysis/static/care_rag_architecture.png" alt="CARE-RAG Architecture" class="rounded-xl border cursor-zoom-in gallery-item">
-                <img src="analysis/static/comparison_analysis.png" alt="Comparison Analysis" class="rounded-xl border cursor-zoom-in gallery-item">
-                <img src="analysis/static/statistical_validation.png" alt="Statistical Validation" class="rounded-xl border cursor-zoom-in gallery-item">
-                <img src="analysis/static/temperature_3d.png" alt="3D Temperature" class="rounded-xl border cursor-zoom-in gallery-item">
-            </div>
-        </div>
-    </section>
-
-    <!-- Image Lightbox Modal -->
-    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50">
-        <button id="lightbox-close" class="absolute top-6 right-6 text-white text-xl p-2 rounded-lg bg-white bg-opacity-10 hover:bg-opacity-20">
-            <i class="fas fa-times"></i>
-        </button>
-        <img id="lightbox-image" src="" alt="" class="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl border">
-        <div id="lightbox-caption" class="absolute bottom-6 text-white text-sm opacity-80"></div>
-    </div>
-
-    <!-- Research Validation -->
-    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Validation & Reproducibility</h2>
-                <p class="text-xl text-gray-600">Rigorous statistical methodology and reproducible results</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="card-light p-8 rounded-2xl">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Statistical Framework</h3>
-                    <ul class="space-y-3 text-gray-600">
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-600 mr-3 mt-0.5"></i>
-                            <span>Bootstrap validation with 10,000 iterations</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-600 mr-3 mt-0.5"></i>
-                            <span>Multiple comparison correction (Benjamini-Hochberg)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-600 mr-3 mt-0.5"></i>
-                            <span>Effect size calculation (Cohen's d)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-600 mr-3 mt-0.5"></i>
-                            <span>Power analysis and sample size validation</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="card-light p-8 rounded-2xl">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Reproducibility</h3>
-                    <p class="text-gray-600 mb-6">
-                        All analysis scripts and data are openly available. Our comprehensive 
-                        analysis suite generates these interactive visualizations automatically 
-                        from the experimental results.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" 
-                           class="bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors inline-flex items-center justify-center">
-                            <i class="fab fa-github mr-2"></i>
-                            View Code
-                        </a>
-                        <a href="https://github.com/chemplusx/BioMed-KAI/releases" target="_blank" 
-                           class="border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors inline-flex items-center justify-center">
-                            <i class="fas fa-download mr-2"></i>
-                            Download Data
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer matching main site -->
-    <footer class="bg-white py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div class="md:col-span-2">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-brain text-white"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900">BioMed-KAI</h3>
-                        <p class="text-sm text-gray-600">Analysis Results</p>
-                        </div>
-                    </div>
-                <p class="text-gray-600 leading-relaxed">
-                    Comprehensive analysis results for the BioMed-KAI platform, demonstrating 
-                    significant improvements in biomedical AI performance.
-                </p>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold text-gray-900 mb-4">Analysis</h4>
-                    <ul class="space-y-2">
-                        <li><a href="analysis/interactive/interactive_dashboard.html" class="text-gray-600 hover:text-blue-600 transition-colors">Performance Dashboard</a></li>
-                        <li><a href="analysis/interactive/interactive_error_analysis.html" class="text-gray-600 hover:text-blue-600 transition-colors">Error Analysis</a></li>
-                        <li><a href="analysis/interactive/interactive_temperature_analysis.html" class="text-gray-600 hover:text-blue-600 transition-colors">Temperature Analysis</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold text-gray-900 mb-4">Resources</h4>
-                    <ul class="space-y-2">
-                        <li><a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors">Platform</a></li>
-                        <li><a href="https://github.com/chemplusx/BioMed-KAI" target="_blank" class="text-gray-600 hover:text-blue-600 transition-colors">GitHub</a></li>
-                        <li><a href="about.html" class="text-gray-600 hover:text-blue-600 transition-colors">About</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-200 pt-8 text-center">
-                <p class="text-gray-600">
-                    &copy; 2025 BioMed-KAI Platform. Advancing Precision Medicine through Agentic AI.
-                </p>
-            </div>
+        <div class="border-t border-white/10 mt-10 pt-6 text-center text-xs text-slate-200/60">
+            &copy; 2025 BioMed-KAI Platform. Advancing precision medicine through agentic AI.
         </div>
     </footer>
 
+    <script src="assets/js/site.js"></script>
     <script>
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
-
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-
-        // Tabs logic for inline viewer
         const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
         const panes = Array.from(document.querySelectorAll('.tab-pane'));
         const openNewTab = document.getElementById('open-new-tab');
@@ -556,7 +385,6 @@ sitemap: false
             const activeBtn = tabButtons.find(b => b.getAttribute('data-target') === targetId);
             if (activeBtn) activeBtn.classList.add('bg-blue-600', 'text-white');
 
-            // Update open in new tab link
             const iframe = active ? active.querySelector('iframe') : null;
             if (iframe) openNewTab.href = iframe.src;
         }
@@ -564,21 +392,18 @@ sitemap: false
         tabButtons.forEach(btn => {
             btn.addEventListener('click', () => setActiveTab(btn.getAttribute('data-target')));
         });
-        // Initialize default
         setActiveTab('#tab-performance');
 
-        // Fullscreen toggle
         let isFullscreen = false;
         fullscreenBtn.addEventListener('click', () => {
             isFullscreen = !isFullscreen;
             const iframes = viewer.querySelectorAll('iframe');
             iframes.forEach(f => f.style.height = isFullscreen ? '85vh' : '640px');
-            fullscreenBtn.innerHTML = isFullscreen 
-                ? '<i class="fas fa-compress mr-2"></i>Exit Fullscreen'
-                : '<i class="fas fa-expand mr-2"></i>Fullscreen';
+            fullscreenBtn.innerHTML = isFullscreen
+                ? '<i class="fas fa-compress"></i> Exit Fullscreen'
+                : '<i class="fas fa-expand"></i> Fullscreen';
         });
 
-        // Lightbox for images
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-image');
         const lightboxCaption = document.getElementById('lightbox-caption');
