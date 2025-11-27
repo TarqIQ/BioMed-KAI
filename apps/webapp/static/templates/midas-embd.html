@@ -102,21 +102,29 @@
             backdrop-filter: blur(10px);
             scroll-behavior: smooth;
             min-height: 0; /* Important for flex children */
+            max-height: 100%; /* Constrain to parent */
             -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
             overscroll-behavior: contain; /* Prevent scroll chaining */
+            position: relative; /* Ensure proper stacking */
         }
         
-        /* Ensure message bubbles are scrollable */
-        .message-content {
-            max-height: none;
-            overflow: visible;
+        /* Ensure message bubbles don't overflow container */
+        .message {
+            max-width: 100%;
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
         
+        .message-content {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+        
         .ai-bubble {
-            max-height: none;
-            overflow: visible;
+            max-width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         /* Message Animations */
@@ -945,6 +953,11 @@
         .insights-button-hidden {
             display: none !important;
         }
+        
+        /* Ensure insights button is visible when not hidden */
+        .action-btn:not(.insights-button-hidden) {
+            display: inline-flex !important;
+        }
     </style>
 </head>
 
@@ -984,9 +997,9 @@
 
     <div class="overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-40" x-show="sidebarOpen" @click="sidebarOpen = false"></div>
 
-    <main class="flex-grow flex flex-col">
+    <main class="flex-grow flex flex-col" style="height: 100vh; overflow: hidden;">
         <!-- Enhanced Header -->
-        <header class="modern-header px-6 py-4 flex items-center justify-between">
+        <header class="modern-header px-6 py-4 flex items-center justify-between" style="flex-shrink: 0;">
             <div class="flex items-center">
                 <button class="text-slate-400 hover:text-cyan-400 transition-colors mr-4 p-2 rounded-lg hover:bg-cyan-500/10"
                     @click="sidebarOpen = !sidebarOpen">
@@ -1014,7 +1027,7 @@
         </div>
 
         <!-- Enhanced Input Section -->
-        <section class="input-section p-6">
+        <section class="input-section p-6" style="flex-shrink: 0;">
             <div class="max-w-4xl mx-auto">
                 <!-- Suggestion Cards -->
                 <div id="suggestion-section" class="suggestion-grid grid grid-cols-2 gap-4 mb-6">
@@ -1334,8 +1347,10 @@
                                     }
                                 }
 
-                                // Scroll after a brief delay to ensure DOM is updated
-                                setTimeout(() => scrollToBottom(), 50);
+                                // Scroll after content update - use requestAnimationFrame for smooth scrolling
+                                requestAnimationFrame(() => {
+                                    scrollToBottom();
+                                });
                             } catch (e) {
                                 console.error('Error parsing JSON:', e);
                             }
@@ -1388,8 +1403,18 @@
                 </div>
             `;
 
-            const messageContainer = messageElement.lastChild;
-            messageContainer.insertBefore(ponderingDiv, messageContainer.firstChild);
+            // Find the message container (could be messageElement or its child)
+            let messageContainer = messageElement;
+            if (messageElement.classList.contains('message')) {
+                // It's messageDiv, find the container
+                messageContainer = messageElement.querySelector('.max-w-4xl') || messageElement.lastChild;
+            }
+            
+            if (messageContainer && messageContainer.firstChild) {
+                messageContainer.insertBefore(ponderingDiv, messageContainer.firstChild);
+            } else {
+                messageContainer.appendChild(ponderingDiv);
+            }
             currentPonderingElement = ponderingDiv;
 
             scrollToBottom();
@@ -1406,7 +1431,15 @@
             const agentTag = document.createElement('span');
             agentTag.className = 'text-xs text-cyan-400 bg-cyan-500/20 rounded-full px-2 py-1 ml-2';
             agentTag.textContent = agentName;
-            messageElement.appendChild(agentTag);
+            
+            // Find the bubble or message container to append to
+            let targetElement = messageElement;
+            if (messageElement.classList.contains('message')) {
+                // It's messageDiv, find the bubble
+                targetElement = messageElement.querySelector('.ai-bubble') || messageElement.querySelector('.message-content') || messageElement;
+            }
+            
+            targetElement.appendChild(agentTag);
         }
 
         function updateSuggestions(recommendations) {
@@ -1452,6 +1485,7 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = `message flex ${sender === 'user' ? 'justify-end' : 'justify-start'} mb-6 message-enter`;
             messageDiv.dataset.id = messageId;
+            messageDiv.dataset.messageId = messageId; // Store messageId for easy lookup
 
             const messageContainer = document.createElement('div');
             messageContainer.className = `max-w-4xl ${sender === 'user' ? 'ml-12' : 'mr-12'} relative group`;
@@ -1520,14 +1554,17 @@
                 textContainer.className = 'flex-grow';
                 textContainer.appendChild(contentDiv);
 
-                bubble.appendChild(avatarDiv);
-                bubble.appendChild(textContainer);
+            bubble.appendChild(avatarDiv);
+            bubble.appendChild(textContainer);
 
-                contentDiv.innerHTML = text ? marked.parse(text) : '';
+            contentDiv.innerHTML = text ? marked.parse(text) : '';
 
-                // AI message actions
-                const actionsDiv = document.createElement('div');
-                actionsDiv.className = 'message-actions flex items-center gap-2 mt-3 ml-12';
+            // AI message actions
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'message-actions flex items-center gap-2 mt-3 ml-12';
+            
+            // Store reference to messageDiv for metadata lookup
+            const messageDivRef = messageDiv;
 
                 const copyButton = document.createElement('button');
                 copyButton.innerHTML = '<i class="fas fa-copy"></i>';
@@ -1540,10 +1577,15 @@
                 insightsButton.className = 'action-btn hover:text-cyan-400 p-2 rounded-lg text-xs insights-button-hidden';
                 insightsButton.title = 'View insights';
                 insightsButton.dataset.messageId = messageId;
+                insightsButton.id = `insights-btn-${messageId}`; // Add ID for easier lookup
                 insightsButton.addEventListener('click', () => {
-                    const metadata = insightsButton.dataset.metadata || messageElement.dataset.metadata;
+                    const metadata = insightsButton.dataset.metadata || messageDiv.dataset.metadata;
                     if (metadata) {
-                        showInsightsModal(JSON.parse(metadata));
+                        try {
+                            showInsightsModal(JSON.parse(metadata));
+                        } catch (e) {
+                            console.error('Error parsing metadata:', e);
+                        }
                     }
                 });
 
@@ -1587,7 +1629,8 @@
             }
 
             scrollToBottom();
-            return bubble;
+            // Return messageDiv instead of bubble for better metadata access
+            return messageDiv;
         }
 
         function handleEdit(id, newText) {
@@ -1732,21 +1775,34 @@
             // Use requestAnimationFrame for smoother scrolling
             requestAnimationFrame(() => {
                 try {
-                    // Force scroll to bottom
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    // Ensure chat container is scrollable
+                    if (!chatMessages) return;
                     
-                    // Also try smooth scroll if supported
+                    // Force scroll to bottom - multiple methods for reliability
+                    const scrollHeight = chatMessages.scrollHeight;
+                    const clientHeight = chatMessages.clientHeight;
+                    
+                    // Method 1: Direct assignment
+                    chatMessages.scrollTop = scrollHeight;
+                    
+                    // Method 2: scrollTo if available
                     if (chatMessages.scrollTo) {
                         chatMessages.scrollTo({
-                            top: chatMessages.scrollHeight,
-                            behavior: 'auto' // Use 'auto' for immediate scroll, 'smooth' can cause issues
+                            top: scrollHeight,
+                            behavior: 'auto'
                         });
                     }
                     
-                    // Additional fallback for stubborn scrolling
+                    // Method 3: scrollIntoView on last message
+                    const lastMessage = chatMessages.lastElementChild;
+                    if (lastMessage) {
+                        lastMessage.scrollIntoView({ behavior: 'auto', block: 'end' });
+                    }
+                    
+                    // Additional fallback - ensure scroll happens
                     setTimeout(() => {
                         chatMessages.scrollTop = chatMessages.scrollHeight;
-                    }, 100);
+                    }, 50);
                 } catch (e) {
                     console.error('Scroll error:', e);
                 }
@@ -1816,22 +1872,69 @@
 
         // Metadata Display Functions - Store metadata for insights button
         function displayMetadata(messageElement, metadata) {
-            // Store metadata in the insights button instead of displaying directly
-            const insightsButton = messageElement.querySelector('[data-message-id]');
+            // messageElement could be the bubble or messageDiv, find the actual messageDiv
+            let messageDiv = messageElement;
+            if (!messageDiv.dataset.messageId) {
+                // If it's the bubble, find the parent messageDiv
+                messageDiv = messageElement.closest('.message[data-message-id]') || messageElement.closest('.message');
+            }
+            
+            if (!messageDiv) {
+                console.warn('Could not find messageDiv for metadata');
+                return;
+            }
+            
+            // Store metadata in messageDiv
+            messageDiv.dataset.metadata = JSON.stringify(metadata);
+            
+            // Find insights button - try multiple selectors
+            const messageId = messageDiv.dataset.messageId || messageDiv.dataset.id;
+            let insightsButton = null;
+            
+            if (messageId) {
+                // Try by ID first
+                insightsButton = document.getElementById(`insights-btn-${messageId}`);
+            }
+            
+            // Fallback: search within messageDiv
+            if (!insightsButton) {
+                insightsButton = messageDiv.querySelector('[data-message-id]');
+            }
+            
+            // Fallback: search by class
+            if (!insightsButton) {
+                insightsButton = messageDiv.querySelector('.insights-button-hidden');
+            }
+            
             if (insightsButton) {
                 insightsButton.dataset.metadata = JSON.stringify(metadata);
                 insightsButton.classList.remove('insights-button-hidden');
+                insightsButton.style.display = 'inline-flex'; // Force display
+                console.log('Insights button shown for message:', messageId, insightsButton);
             } else {
-                // If button doesn't exist yet, store in message element for later
-                messageElement.dataset.metadata = JSON.stringify(metadata);
-                // Try to find button after a short delay
-                setTimeout(() => {
-                    const btn = messageElement.querySelector('[data-message-id]');
+                // If button doesn't exist yet, try again after a delay with multiple attempts
+                let attempts = 0;
+                const maxAttempts = 5;
+                const findButton = () => {
+                    attempts++;
+                    const btn = document.getElementById(`insights-btn-${messageId}`) || 
+                               messageDiv.querySelector(`[data-message-id="${messageId}"]`) ||
+                               messageDiv.querySelector('[data-message-id]') ||
+                               messageDiv.querySelector('.insights-button-hidden');
                     if (btn) {
                         btn.dataset.metadata = JSON.stringify(metadata);
                         btn.classList.remove('insights-button-hidden');
+                        btn.style.display = 'inline-flex'; // Force display
+                        console.log('Insights button shown (delayed attempt', attempts, ') for message:', messageId, btn);
+                    } else if (attempts < maxAttempts) {
+                        setTimeout(findButton, 100);
+                    } else {
+                        console.warn('Could not find insights button for message after', maxAttempts, 'attempts:', messageId);
+                        console.warn('MessageDiv:', messageDiv);
+                        console.warn('Available buttons:', messageDiv.querySelectorAll('button'));
                     }
-                }, 100);
+                };
+                setTimeout(findButton, 100);
             }
         }
         
