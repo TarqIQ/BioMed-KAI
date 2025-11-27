@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>BioMed-KAI - Enhanced Precision Medicine Chat</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.8.2/alpine.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* TarqIQ Dark Theme Base */
+        :root {
+            --neon-cyan: #06b6d4;
+            --neon-purple: #8b5cf6;
+            --deep-bg: #030712;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: var(--deep-bg);
+            color: #e2e8f0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 100vh;
+            height: 100dvh; /* Dynamic viewport height for mobile */
+        }
+
+        /* Enhanced Scrollbar - Dark Theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #0891b2, #7c3aed);
+        }
+
+        /* Modern Glassmorphism - Dark Theme */
+        .glass {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-strong {
+            background: rgba(17, 24, 39, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 20px 60px rgba(6, 182, 212, 0.2);
+        }
+
+        /* Enhanced Header - Dark Theme */
+        .modern-header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Enhanced Sidebar - Dark Theme */
+        .enhanced-sidebar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Enhanced Chat Container - Dark Theme */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 2rem;
+            background: rgba(3, 7, 18, 0.5);
+            backdrop-filter: blur(10px);
+            scroll-behavior: smooth;
+            min-height: 0; /* Important for flex children */
+        }
+
+        /* Message Animations */
+        .message-enter {
+            animation: slideInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Enhanced Message Bubbles - Dark Theme */
+        .user-bubble {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: white;
+        }
+
+        .ai-bubble {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            color: #e2e8f0;
+        }
+
+        .ai-bubble:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 35px rgba(6, 182, 212, 0.2);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+
+        /* Pondering Action Styles - Dark Theme */
+        .pondering-action {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            animation: ponderingPulse 2s ease-in-out infinite;
+            color: var(--neon-cyan);
+        }
+
+        @keyframes ponderingPulse {
+
+            0%,
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.02);
+            }
+        }
+
+        /* Thinking Indicator Enhancement - Dark Theme */
+        .thinking-enhanced {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            animation: thinkingBreathe 3s ease-in-out infinite;
+            color: #e2e8f0;
+        }
+
+        @keyframes thinkingBreathe {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .typing-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: typingDot 1.4s ease-in-out infinite both;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0s;
+        }
+
+        @keyframes typingDot {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* Enhanced Input Section - Dark Theme */
+        .input-section {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-input {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(6, 182, 212, 0.2);
+            transition: all 0.3s ease;
+            color: #e2e8f0;
+        }
+
+        .chat-input::placeholder {
+            color: rgba(226, 232, 240, 0.5);
+        }
+
+        .chat-input:focus {
+            border-color: rgba(6, 182, 212, 0.6);
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1);
+            background: rgba(17, 24, 39, 0.9);
+        }
+
+        /* Enhanced Buttons - Dark Theme */
+        .send-button {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.5);
+        }
+
+        .send-button:active {
+            transform: translateY(0);
+        }
+
+        .new-chat-btn {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            transition: all 0.3s ease;
+            color: var(--neon-cyan);
+        }
+
+        .new-chat-btn:hover {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: rgba(6, 182, 212, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* Suggestion Cards - Dark Theme */
+        .suggestion-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(6, 182, 212, 0.25);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: #cbd5e1;
+            font-size: medium;
+            padding: 8px;
+        }
+
+        .suggestion-card:hover {
+            transform: translateY(-3px);
+            background: rgba(17, 24, 39, 0.9);
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+        }
+
+        /* Message Actions */
+        .message-actions {
+            opacity: 0;
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .action-btn {
+            background: rgba(6, 182, 212, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            transition: all 0.2s ease;
+            color: #94a3b8;
+        }
+
+        .action-btn:hover {
+            background: rgba(6, 182, 212, 0.2);
+            transform: scale(1.1);
+            color: var(--neon-cyan);
+        }
+
+        /* Markdown Content Enhancement - Dark Theme */
+        .markdown-content {
+            color: #e2e8f0;
+            line-height: 1.7;
+        }
+
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+            color: #f1f5f9;
+        }
+
+        .markdown-content code {
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: var(--neon-cyan);
+        }
+
+        .markdown-content pre {
+            background: rgba(3, 7, 18, 0.9);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .markdown-content pre code {
+            background: transparent;
+            border: none;
+            color: #e2e8f0;
+        }
+
+        /* Avatar Enhancement - Dark Theme */
+        .ai-avatar {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Navigation Links - Dark Theme */
+        .nav-link {
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .nav-link:hover {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--neon-cyan);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: white;
+        }
+
+        /* Responsive Enhancements */
+        @media (max-width: 768px) {
+            html {
+                height: 100%;
+                height: 100dvh;
+            }
+
+            body {
+                height: 100%;
+                height: 100dvh; /* Dynamic viewport height for mobile */
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+            }
+
+            main {
+                height: 100%;
+                height: 100dvh;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .chat-container {
+                padding: 1rem;
+                flex: 1 1 auto;
+                min-height: 0;
+                overflow-y: auto;
+                overflow-x: hidden;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+                /* Ensure chat is scrollable */
+                position: relative;
+            }
+
+            .suggestion-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .input-section {
+                flex-shrink: 0;
+                padding: 1rem;
+                position: relative;
+                z-index: 10;
+            }
+
+            .modern-header {
+                flex-shrink: 0;
+                position: relative;
+                z-index: 10;
+            }
+
+            /* Adjust message spacing on mobile */
+            .message {
+                margin-bottom: 1rem !important;
+            }
+
+            /* Fix message container margins on mobile */
+            .message > div {
+                max-width: calc(100% - 1rem) !important;
+                margin-left: 0.5rem !important;
+                margin-right: 0.5rem !important;
+            }
+
+            .message > div.ml-12 {
+                margin-left: 0.5rem !important;
+            }
+
+            .message > div.mr-12 {
+                margin-right: 0.5rem !important;
+            }
+
+            /* User and AI message bubbles on mobile */
+            .user-bubble,
+            .ai-bubble {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            /* Smaller text on mobile */
+            .chat-input {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 0.75rem 1rem;
+            }
+
+            /* Compact suggestion cards on mobile */
+            .suggestion-card {
+                padding: 0.75rem;
+                font-size: 0.875rem;
+            }
+
+            /* Adjust header on mobile */
+            .modern-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .modern-header h1 {
+                font-size: 1rem;
+            }
+
+            .modern-header p {
+                font-size: 0.75rem;
+            }
+
+            /* Make send button smaller on mobile */
+            .send-button {
+                padding: 0.75rem 1rem;
+                min-width: 48px;
+            }
+
+            /* Fix thinking indicator and error containers on mobile */
+            .thinking-enhanced,
+            .error-container {
+                margin-left: 0.5rem !important;
+                margin-right: 0.5rem !important;
+            }
+
+            /* Ensure input form doesn't overflow on mobile */
+            #chat-form {
+                gap: 0.5rem;
+            }
+
+            /* Hide character count on very small screens */
+            @media (max-width: 480px) {
+                #char-count {
+                    display: none;
+                }
+
+                .suggestion-card {
+                    padding: 0.5rem;
+                    font-size: 0.8rem;
+                }
+            }
+        }
+
+        /* Loading State - Dark Theme */
+        .loading-skeleton {
+            background: linear-gradient(90deg, rgba(15, 23, 42, 0.5) 25%, rgba(6, 182, 212, 0.2) 50%, rgba(15, 23, 42, 0.5) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Enhanced Focus States - Dark Theme */
+        .focus-ring:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Minimal/Embed Mode Styles */
+        .minimal-mode .enhanced-sidebar,
+        .minimal-mode .overlay,
+        .minimal-mode .modern-header {
+            display: none !important;
+        }
+
+        .minimal-mode main {
+            height: 100vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .minimal-mode .chat-container {
+            flex: 1;
+            height: auto;
+            max-height: none;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .minimal-mode .input-section {
+            padding: 1rem 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .minimal-mode #suggestion-section {
+            margin-bottom: 1rem;
+        }
+
+        /* Hide new chat button in minimal mode */
+        .minimal-mode #new-chat {
+            display: none;
+        }
+
+        /* Option to hide suggestions */
+        .hide-suggestions #suggestion-section {
+            display: none !important;
+        }
+
+        /* Ensure body takes full height in minimal mode */
+        .minimal-mode body {
+            height: 100vh;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="text-slate-200" x-data="{ sidebarOpen: false }" id="main-body">
+    <!-- Enhanced Sidebar -->
+    <div class="enhanced-sidebar fixed top-0 left-0 h-full w-72 transform transition-transform duration-300 ease-in-out z-50"
+        :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }">
+        <div class="p-6">
+            <div class="flex items-center mb-8">
+                <div
+                    class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center mr-3">
+                    <i class="fas fa-brain text-white text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-white">BioMed-KAI</h2>
+                    <p class="text-xs text-slate-400">Precision Medicine AI</p>
+                </div>
+            </div>
+            <nav>
+                <ul class="space-y-3">
+                    <li><a href="home"
+                            class="nav-link flex items-center px-4 py-3 hover:text-cyan-400 transition duration-300">
+                            <i class="fas fa-home mr-3"></i>Home
+                        </a></li>
+                    <li><a href="midas"
+                            class="nav-link active flex items-center px-4 py-3 font-semibold transition duration-300">
+                            <i class="fas fa-comments mr-3"></i>Chat Interface
+                        </a></li>
+                    <li><a href="source"
+                            class="nav-link flex items-center px-4 py-3 hover:text-cyan-400 transition duration-300">
+                            <i class="fas fa-project-diagram mr-3"></i>Knowledge Graph
+                        </a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-40" x-show="sidebarOpen" @click="sidebarOpen = false"></div>
+
+    <main class="flex-grow flex flex-col">
+        <!-- Enhanced Header -->
+        <header class="modern-header px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <button class="text-slate-400 hover:text-cyan-400 transition-colors mr-4 p-2 rounded-lg hover:bg-cyan-500/10"
+                    @click="sidebarOpen = !sidebarOpen">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
+                <div class="flex items-center">
+                    <div class="ai-avatar w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-robot text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">BioMed-KAI Assistant</h1>
+                        <p class="text-sm text-slate-400">Ready to help with precision medicine</p>
+                    </div>
+                </div>
+            </div>
+            <button id="new-chat"
+                class="new-chat-btn px-4 py-2 rounded-xl font-medium transition duration-300 flex items-center">
+                <i class="fas fa-plus mr-2"></i>New Chat
+            </button>
+        </header>
+
+        <!-- Chat Messages -->
+        <div id="chat-messages" class="chat-container flex-grow">
+            <!-- Messages will be inserted here -->
+        </div>
+
+        <!-- Enhanced Input Section -->
+        <section class="input-section p-6">
+            <div class="max-w-4xl mx-auto">
+                <!-- Suggestion Cards -->
+                <div id="suggestion-section" class="suggestion-grid grid grid-cols-2 gap-4 mb-6">
+                    <div class="suggestion-card rounded-xl p-4 text-sm">
+                        <i class="fas fa-microscope text-cyan-400 mr-2"></i>
+                        What are the latest advancements in cancer immunotherapy?
+                    </div>
+                    <div class="suggestion-card rounded-xl p-4 text-sm">
+                        <i class="fas fa-dna text-cyan-400 mr-2"></i>
+                        How does pharmacogenomics influence drug efficacy?
+                    </div>
+                    <div class="suggestion-card rounded-xl p-4 text-sm">
+                        <i class="fas fa-chart-line text-cyan-400 mr-2"></i>
+                        Can you explain the role of biomarkers in precision medicine?
+                    </div>
+                    <div class="suggestion-card rounded-xl p-4 text-sm">
+                        <i class="fas fa-balance-scale text-cyan-400 mr-2"></i>
+                        What are the ethical considerations in genetic testing?
+                    </div>
+                </div>
+
+                <!-- Input Form -->
+                <form id="chat-form" class="flex items-end gap-4">
+                    <div class="flex-grow relative">
+                        <textarea id="user-input" rows="1"
+                            class="chat-input w-full px-6 py-4 rounded-2xl resize-none focus-ring placeholder-slate-500"
+                            placeholder="Ask BioMed-KAI about precision medicine..."
+                            style="min-height: 56px; max-height: 120px;"></textarea>
+                        <div class="absolute right-4 bottom-4 text-xs text-slate-500">
+                            <span id="char-count">0</span>/2000
+                        </div>
+                    </div>
+                    <button type="submit"
+                        class="send-button text-white px-6 py-4 rounded-2xl font-medium transition duration-300 flex items-center h-14">
+                        <i class="fas fa-paper-plane text-lg"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Check for minimal/embed mode parameter
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const body = document.getElementById('main-body');
+            
+            // Enable minimal mode (hides sidebar, header, nav)
+            const minimal = urlParams.get('minimal') === 'true' || urlParams.get('embed') === 'true';
+            if (minimal) {
+                body.classList.add('minimal-mode');
+            }
+            
+            // Hide suggestion cards
+            const hideSuggestions = urlParams.get('hideSuggestions') === 'true' || urlParams.get('noSuggestions') === 'true';
+            if (hideSuggestions) {
+                body.classList.add('hide-suggestions');
+            }
+        })();
+
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const newChatButton = document.getElementById('new-chat');
+        const charCount = document.getElementById('char-count');
+
+        let messageIdCounter = 0;
+        let editingMessageId = null;
+        let chatHistory = [];
+        let chatDetails = {
+            "id": "biomedkai-chat-" + Math.random().toString(16).slice(2),
+            "chat_history": chatHistory
+        };
+        let thinkingInterval;
+        let currentPonderingElement = null;
+
+        // Enhanced marked configuration
+        marked.use({
+            breaks: true,
+            gfm: true,
+            highlight: function (code, language) {
+                const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
+                return hljs.highlight(validLanguage, code).value;
+            },
+        });
+
+        // Auto-resize textarea
+        userInput.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+
+            // Update character count
+            const count = this.value.length;
+            charCount.textContent = count;
+            charCount.className = count > 1800 ? 'text-red-400' : count > 1500 ? 'text-yellow-400' : 'text-slate-500';
+        });
+
+        // Add initial welcome message
+        addMessage('ai', 'Hello! I\'m BioMed-KAI, your AI assistant for precision medicine. How can I help you today?');
+
+        chatForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            sendMessage();
+        });
+
+        // Enhanced keyboard shortcuts
+        userInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        newChatButton.addEventListener('click', function () {
+            chatMessages.innerHTML = '';
+            chatDetails = {
+                "id": "biomedkai-chat-" + Math.random().toString(16).slice(2),
+                "chat_history": []
+            };
+            chatHistory = [];
+            addMessage('ai', 'Hello! I\'m BioMed-KAI, your AI assistant for precision medicine. How can I help you today?');
+        });
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            if (editingMessageId !== null) {
+                updateMessage(editingMessageId, 'user', message);
+                editingMessageId = null;
+            } else {
+                addMessage('user', message);
+            }
+
+            userInput.value = '';
+            userInput.style.height = 'auto';
+            charCount.textContent = '0';
+            charCount.className = 'text-slate-500';
+
+            streamResponse(message);
+        }
+
+        async function streamResponse(message) {
+            const thinkingIndicator = addThinkingIndicator();
+            let timeoutOccurred = false;
+            let timeoutId;
+
+            try {
+                const timeoutPromise = new Promise((_, reject) => {
+                    timeoutId = setTimeout(() => {
+                        timeoutOccurred = true;
+                        reject(new Error('Response timeout'));
+                    }, 30000); // Increased timeout
+                });
+
+                const conversations = chatDetails.chat_history.map(msg => msg.role + "-$$-" + msg.content);
+
+                const fetchPromise = fetch('api/stream', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: message, conversations: conversations, id: chatDetails.id }),
+                });
+
+                const response = await Promise.race([fetchPromise, timeoutPromise]);
+                if (timeoutOccurred) throw new Error('Response timeout');
+
+                clearTimeout(timeoutId);
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                let aiMessageElement = addMessage('ai', '');
+                let fullResponse = '';
+                let recommendations = null;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+                    let eor = false;
+
+                    removeThinkingIndicator(thinkingIndicator);
+
+                    for (const line of lines) {
+                        if (line.startsWith('data:')) {
+                            const jsonStr = line.slice(5).trim();
+                            try {
+                                if (jsonStr === '<EOR>' || jsonStr === '\u003cEOR\u003e') {
+                                    eor = true;
+                                    break;
+                                }
+
+                                const data = JSON.parse(jsonStr);
+
+                                // Handle pondering actions
+                                if (data.chunk && data.chunk.startsWith('<||action||>')) {
+                                    const actionText = data.chunk.replace('<||action||>', '').trim();
+                                    if (actionText) {
+                                        showPonderingAction(actionText, aiMessageElement);
+                                        if (actionText.includes('Agent')) {
+                                            // Extract Agent Name: Sample text "👨‍⚕️ **Sample Agent** responding:\n\n"
+                                            const agentNameMatch = actionText.match(/👨‍⚕️ \*\*(.*?)\*\*/);
+                                            const agentName = agentNameMatch ? agentNameMatch[1] : 'BioMed-KAI';
+
+                                            addAgentTagToMessageBox(aiMessageElement, agentName.replace("Agent", "").trim());
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                // Handle duplicate chunks
+                                if (data.chunk && data.chunk.length > 0 && fullResponse.endsWith(data.chunk) && fullResponse.length > data.chunk.length) {
+                                    fullResponse = fullResponse.slice(0, -data.chunk.length);
+                                }
+
+                                if (data.recommendation) {
+                                    recommendations = data.recommendation;
+                                }
+
+                                if (data.chunk) {
+                                    // Remove any pondering action before adding to response
+                                    hidePonderingAction();
+
+                                    fullResponse += data.chunk || '';
+                                    const contentDiv = aiMessageElement.querySelector('.message-content');
+                                    contentDiv.innerHTML = marked.parse(fullResponse);
+                                    hljs.highlightAll();
+                                }
+
+                                scrollToBottom();
+                            } catch (e) {
+                                console.error('Error parsing JSON:', e);
+                            }
+                        }
+                    }
+                    if (eor) break;
+                }
+
+                // Clean up pondering action
+                hidePonderingAction();
+
+                chatHistory.push({ role: 'user', content: message });
+                chatHistory.push({ role: 'assistant', content: fullResponse });
+                chatDetails.chat_history = chatHistory;
+
+                if (recommendations) {
+                    updateSuggestions(recommendations);
+                }
+            } catch (error) {
+                console.error('Streaming failed:', error);
+                showErrorMessage(timeoutOccurred ?
+                    'Sorry, the response timed out. Please try again.' :
+                    'Sorry, an error occurred while processing your request. Please try again.'
+                );
+            } finally {
+                clearTimeout(timeoutId);
+                removeThinkingIndicator(thinkingIndicator);
+                hidePonderingAction();
+            }
+        }
+
+        function showPonderingAction(actionText, messageElement) {
+            hidePonderingAction(); // Remove any existing pondering action
+
+            const ponderingDiv = document.createElement('div');
+            ponderingDiv.className = 'pondering-action rounded-lg px-3 py-2 mb-2 text-sm text-cyan-400 flex items-center';
+            ponderingDiv.innerHTML = `
+                <div class="typing-dots mr-3">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                <div class="flex-grow">
+                    <div class="pondering-text">${actionText}</div>
+                </div>
+            `;
+
+            const messageContainer = messageElement.lastChild;
+            messageContainer.insertBefore(ponderingDiv, messageContainer.firstChild);
+            currentPonderingElement = ponderingDiv;
+
+            scrollToBottom();
+        }
+
+        function hidePonderingAction() {
+            if (currentPonderingElement) {
+                currentPonderingElement.remove();
+                currentPonderingElement = null;
+            }
+        }
+
+        function addAgentTagToMessageBox(messageElement, agentName = 'BioMed-KAI') {
+            const agentTag = document.createElement('span');
+            agentTag.className = 'text-xs text-cyan-400 bg-cyan-500/20 rounded-full px-2 py-1 ml-2';
+            agentTag.textContent = agentName;
+            messageElement.appendChild(agentTag);
+        }
+
+        function updateSuggestions(recommendations) {
+            const suggestionSection = document.getElementById('suggestion-section');
+            suggestionSection.innerHTML = '';
+
+            // Parse recommendations
+            let parsedRecommendations = recommendations;
+            if (typeof recommendations === 'string') {
+                try {
+                    parsedRecommendations = recommendations.substring(2, recommendations.length - 2).split("', '");
+                    if (parsedRecommendations.length === 1) {
+                        parsedRecommendations = parsedRecommendations[0].split("\", \"");
+                    }
+                } catch (e) {
+                    console.error('Error parsing recommendations:', e);
+                    return;
+                }
+            }
+
+            const icons = ['fas fa-microscope', 'fas fa-dna', 'fas fa-chart-line', 'fas fa-balance-scale'];
+
+            parsedRecommendations.forEach((recommendation, index) => {
+                const suggestionDiv = document.createElement('div');
+                suggestionDiv.className = 'suggestion-card rounded-xl p-4 text-sm';
+                suggestionDiv.innerHTML = `
+                    <i class="${icons[index % icons.length]} text-cyan-400 mr-2"></i>
+                    ${recommendation}
+                `;
+
+                suggestionDiv.addEventListener('click', function () {
+                    userInput.value = recommendation;
+                    userInput.focus();
+                    sendMessage();
+                });
+
+                suggestionSection.appendChild(suggestionDiv);
+            });
+        }
+
+        function addMessage(sender, text, id = null) {
+            const messageId = id !== null ? id : messageIdCounter++;
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message flex ${sender === 'user' ? 'justify-end' : 'justify-start'} mb-6 message-enter`;
+            messageDiv.dataset.id = messageId;
+
+            const messageContainer = document.createElement('div');
+            messageContainer.className = `max-w-4xl ${sender === 'user' ? 'ml-12' : 'mr-12'} relative group`;
+
+            const bubble = document.createElement('div');
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content markdown-content';
+
+            if (sender === 'user') {
+                bubble.className = 'user-bubble rounded-2xl px-6 py-4 shadow-lg';
+                contentDiv.innerHTML = text;
+                contentDiv.contentEditable = true;
+                contentDiv.className += ' editable-message focus-ring';
+
+                contentDiv.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.blur();
+                        handleEdit(messageId, this.innerText);
+                    }
+                });
+
+                // Enhanced message actions
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'message-actions flex items-center gap-2 mt-2';
+
+                const editButton = document.createElement('button');
+                editButton.innerHTML = '<i class="fas fa-edit"></i>';
+                editButton.className = 'action-btn p-2 rounded-lg text-xs';
+                editButton.title = 'Edit message';
+                editButton.addEventListener('click', () => {
+                    contentDiv.focus();
+                    const range = document.createRange();
+                    range.selectNodeContents(contentDiv);
+                    range.collapse(false);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                });
+
+                const resendButton = document.createElement('button');
+                resendButton.innerHTML = '<i class="fas fa-redo"></i>';
+                resendButton.className = 'action-btn p-2 rounded-lg text-xs';
+                resendButton.title = 'Resend message';
+                resendButton.addEventListener('click', () => resendMessage(messageId));
+
+                const copyButton = document.createElement('button');
+                copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+                copyButton.className = 'action-btn p-2 rounded-lg text-xs';
+                copyButton.title = 'Copy message';
+                copyButton.addEventListener('click', () => copyToClipboard(text));
+
+                actionsDiv.appendChild(editButton);
+                actionsDiv.appendChild(resendButton);
+                actionsDiv.appendChild(copyButton);
+                messageContainer.appendChild(actionsDiv);
+            } else {
+                bubble.className = 'ai-bubble rounded-2xl px-6 py-4 shadow-lg flex items-start';
+
+                // AI Avatar
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'ai-avatar w-8 h-8 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-1';
+                avatarDiv.innerHTML = '<i class="fas fa-robot text-white text-sm"></i>';
+
+                const textContainer = document.createElement('div');
+                textContainer.className = 'flex-grow';
+                textContainer.appendChild(contentDiv);
+
+                bubble.appendChild(avatarDiv);
+                bubble.appendChild(textContainer);
+
+                contentDiv.innerHTML = text ? marked.parse(text) : '';
+
+                // AI message actions
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'message-actions flex items-center gap-2 mt-3 ml-12';
+
+                const copyButton = document.createElement('button');
+                copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+                copyButton.className = 'action-btn p-2 rounded-lg text-xs';
+                copyButton.title = 'Copy response';
+                copyButton.addEventListener('click', () => copyToClipboard(contentDiv.innerText));
+
+                const thumbsUpButton = document.createElement('button');
+                thumbsUpButton.innerHTML = '<i class="far fa-thumbs-up"></i>';
+                thumbsUpButton.className = 'action-btn hover:text-green-500 p-2 rounded-lg text-xs';
+                thumbsUpButton.title = 'Good response';
+                thumbsUpButton.addEventListener('click', () => {
+                    thumbsUpButton.innerHTML = '<i class="fas fa-thumbs-up"></i>';
+                    thumbsUpButton.className = thumbsUpButton.className.replace('hover:text-green-500', 'text-green-500');
+                });
+
+                const thumbsDownButton = document.createElement('button');
+                thumbsDownButton.innerHTML = '<i class="far fa-thumbs-down"></i>';
+                thumbsDownButton.className = 'action-btn hover:text-red-500 p-2 rounded-lg text-xs';
+                thumbsDownButton.title = 'Poor response';
+                thumbsDownButton.addEventListener('click', () => {
+                    thumbsDownButton.innerHTML = '<i class="fas fa-thumbs-down"></i>';
+                    thumbsDownButton.className = thumbsDownButton.className.replace('hover:text-red-500', 'text-red-500');
+                });
+
+                actionsDiv.appendChild(copyButton);
+                actionsDiv.appendChild(thumbsUpButton);
+                actionsDiv.appendChild(thumbsDownButton);
+                messageContainer.appendChild(actionsDiv);
+            }
+
+            bubble.appendChild(contentDiv);
+            messageContainer.appendChild(bubble);
+            messageDiv.appendChild(messageContainer);
+            chatMessages.appendChild(messageDiv);
+
+            if (sender === 'ai' && text) {
+                hljs.highlightAll();
+            }
+
+            scrollToBottom();
+            return bubble;
+        }
+
+        function handleEdit(id, newText) {
+            updateMessage(id, 'user', newText);
+            resendMessage(id);
+        }
+
+        function updateMessage(id, sender, text) {
+            const messageDiv = document.querySelector(`.message[data-id="${id}"]`);
+            const contentDiv = messageDiv.querySelector('.message-content');
+            contentDiv.innerHTML = sender === 'user' ? text : marked.parse(text);
+
+            if (sender === 'ai') {
+                hljs.highlightAll();
+            }
+
+            // Update chat history
+            const messageIndex = chatHistory.findIndex(msg => msg.role === 'user' && msg.content === text);
+            if (messageIndex !== -1) {
+                chatHistory[messageIndex].content = text;
+                chatHistory.splice(messageIndex + 1);
+            }
+        }
+
+        function resendMessage(id) {
+            const messageDiv = document.querySelector(`.message[data-id="${id}"]`);
+            const contentDiv = messageDiv.querySelector('.message-content');
+            const message = contentDiv.innerText.trim();
+
+            // Remove all messages after this one
+            let nextSibling = messageDiv.nextElementSibling;
+            while (nextSibling) {
+                chatMessages.removeChild(nextSibling);
+                nextSibling = messageDiv.nextElementSibling;
+            }
+
+            // Update chat history
+            const messageIndex = chatHistory.findIndex(msg => msg.role === 'user' && msg.content === message);
+            if (messageIndex !== -1) {
+                chatHistory.splice(messageIndex + 1);
+            }
+
+            streamResponse(message);
+        }
+
+        function addThinkingIndicator() {
+            const indicatorDiv = document.createElement('div');
+            indicatorDiv.className = 'message flex justify-start mb-6 message-enter';
+
+            const messages = [
+                "Analyzing your question...",
+                "Searching medical knowledge...",
+                "Preparing response...",
+                "Validating information..."
+            ];
+            let messageIndex = 0;
+
+            const container = document.createElement('div');
+            container.className = 'max-w-5xl mr-12';
+
+            const thinkingContainer = document.createElement('div');
+            thinkingContainer.className = 'thinking-enhanced rounded-2xl px-6 py-4 shadow-lg flex items-center';
+
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'ai-avatar w-8 h-8 rounded-full flex items-center justify-center mr-4 flex-shrink-0';
+            avatarDiv.innerHTML = '<i class="fas fa-robot text-white text-sm"></i>';
+
+            const messageText = document.createElement('span');
+            messageText.className = 'mr-4 text-slate-400 text-sm';
+            messageText.textContent = messages[messageIndex];
+
+            const dotsContainer = document.createElement('div');
+            dotsContainer.className = 'typing-dots';
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'typing-dot';
+                dotsContainer.appendChild(dot);
+            }
+
+            thinkingContainer.appendChild(avatarDiv);
+            thinkingContainer.appendChild(messageText);
+            thinkingContainer.appendChild(dotsContainer);
+            container.appendChild(thinkingContainer);
+            indicatorDiv.appendChild(container);
+
+            chatMessages.appendChild(indicatorDiv);
+            scrollToBottom();
+
+            // Cycle through messages
+            thinkingInterval = setInterval(() => {
+                messageIndex = (messageIndex + 1) % messages.length;
+                messageText.textContent = messages[messageIndex];
+            }, 2500);
+
+            return indicatorDiv;
+        }
+
+        function removeThinkingIndicator(indicator) {
+            clearInterval(thinkingInterval);
+            if (indicator && indicator.parentNode) {
+                indicator.parentNode.removeChild(indicator);
+            }
+        }
+
+        function showErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'message flex justify-start mb-6 message-enter';
+
+            const container = document.createElement('div');
+            container.className = 'max-w-4xl mr-12';
+
+            const errorContainer = document.createElement('div');
+            errorContainer.className = 'bg-red-900/30 border border-red-500/50 text-red-400 rounded-2xl px-6 py-4 shadow-lg flex items-center';
+            errorContainer.innerHTML = `
+                <i class="fas fa-exclamation-triangle text-red-400 mr-3"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(errorContainer);
+            errorDiv.appendChild(container);
+            chatMessages.appendChild(errorDiv);
+            scrollToBottom();
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show temporary success indicator
+                const toast = document.createElement('div');
+                toast.className = 'fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+                toast.innerHTML = '<i class="fas fa-check mr-2"></i>Copied to clipboard';
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(-20px)';
+                    setTimeout(() => document.body.removeChild(toast), 300);
+                }, 2000);
+            });
+        }
+
+        function scrollToBottom() {
+            // Use requestAnimationFrame for smoother scrolling on mobile
+            requestAnimationFrame(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                // Also try smooth scroll if supported
+                if (chatMessages.scrollTo) {
+                    chatMessages.scrollTo({
+                        top: chatMessages.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        }
+
+        // Enhanced suggestion card interactions
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('.suggestion-card')) {
+                const card = e.target.closest('.suggestion-card');
+                const text = card.textContent.trim();
+                // Remove icon text from the beginning
+                const cleanText = text.replace(/^[^\w]*/, '').trim();
+                userInput.value = cleanText;
+                userInput.focus();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+            // Ctrl/Cmd + K to focus input
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                userInput.focus();
+            }
+
+            // Escape to clear input
+            if (e.key === 'Escape' && document.activeElement === userInput) {
+                userInput.value = '';
+                userInput.style.height = 'auto';
+                charCount.textContent = '0';
+                charCount.className = 'text-slate-500';
+            }
+        });
+
+        // Auto-scroll on new messages - Enhanced observer
+        const observer = new MutationObserver(function (mutations) {
+            let shouldScroll = false;
+            mutations.forEach(function (mutation) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    shouldScroll = true;
+                }
+                if (mutation.type === 'characterData' || (mutation.type === 'childList' && mutation.target.classList.contains('message-content'))) {
+                    shouldScroll = true;
+                }
+            });
+            if (shouldScroll) {
+                scrollToBottom();
+            }
+        });
+
+        observer.observe(chatMessages, {
+            childList: true,
+            subtree: true,
+            characterData: true
+        });
+
+        // Improved responsive handling
+        window.addEventListener('resize', function () {
+            scrollToBottom();
+        });
+
+        // Force scroll to bottom when page loads
+        window.addEventListener('load', function () {
+            setTimeout(scrollToBottom, 100);
+        });
+    </script>
+</body>
+
+</html>
