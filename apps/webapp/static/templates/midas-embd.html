@@ -102,6 +102,21 @@
             backdrop-filter: blur(10px);
             scroll-behavior: smooth;
             min-height: 0; /* Important for flex children */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            overscroll-behavior: contain; /* Prevent scroll chaining */
+        }
+        
+        /* Ensure message bubbles are scrollable */
+        .message-content {
+            max-height: none;
+            overflow: visible;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .ai-bubble {
+            max-height: none;
+            overflow: visible;
         }
 
         /* Message Animations */
@@ -1190,6 +1205,32 @@
                     removeThinkingIndicator(thinkingIndicator);
 
                     for (const line of lines) {
+                        // Skip empty lines
+                        if (!line.trim()) continue;
+                        
+                        // Check if line contains metadata JSON (even if not starting with 'data:')
+                        if (line.includes('"type": "metadata"') || (line.includes('"kg_data"') && line.includes('"agent_selection"'))) {
+                            try {
+                                // Extract JSON from line (handle both 'data: {...}' and plain '{...}' formats)
+                                let jsonStr = line;
+                                if (line.startsWith('data:')) {
+                                    jsonStr = line.slice(5).trim();
+                                } else if (line.trim().startsWith('{')) {
+                                    jsonStr = line.trim();
+                                }
+                                
+                                const data = JSON.parse(jsonStr);
+                                if (data && (data.type === 'metadata' || (data.kg_data && data.agent_selection))) {
+                                    metadata = data.type === 'metadata' ? data : { type: 'metadata', ...data };
+                                    displayMetadata(aiMessageElement, metadata);
+                                    continue; // Skip - don't add to response
+                                }
+                            } catch (e) {
+                                // If parsing fails, skip this line entirely (it's likely metadata)
+                                continue;
+                            }
+                        }
+                        
                         if (line.startsWith('data:')) {
                             const jsonStr = line.slice(5).trim();
                             try {
@@ -1203,12 +1244,24 @@
                                 try {
                                     data = JSON.parse(jsonStr);
                                 } catch (parseError) {
-                                    // If not JSON, treat as plain text chunk
-                                    if (jsonStr && !jsonStr.startsWith('<||action||>')) {
+                                    // If not JSON, check if it's metadata before treating as plain text
+                                    // Skip if it contains metadata indicators
+                                    if (jsonStr && 
+                                        (jsonStr.includes('"type": "metadata"') || 
+                                         (jsonStr.includes('"kg_data"') && jsonStr.includes('"agent_selection"')))) {
+                                        continue; // Skip metadata
+                                    }
+                                    
+                                    // If not JSON and not metadata, treat as plain text chunk
+                                    // But skip if it looks like JSON (starts with { or [)
+                                    if (jsonStr && !jsonStr.startsWith('<||action||>') && 
+                                        !jsonStr.trim().startsWith('{') && !jsonStr.trim().startsWith('[')) {
                                         fullResponse += jsonStr;
                                         const contentDiv = aiMessageElement.querySelector('.message-content');
-                                        contentDiv.innerHTML = marked.parse(fullResponse);
-                                        hljs.highlightAll();
+                                        if (contentDiv) {
+                                            contentDiv.innerHTML = marked.parse(fullResponse);
+                                            hljs.highlightAll();
+                                        }
                                     }
                                     continue;
                                 }
@@ -1259,16 +1312,30 @@
                                         continue;
                                     }
                                     
+                                    // Skip if chunk contains metadata JSON (additional safety check)
+                                    const chunkStr = String(data.chunk);
+                                    if (chunkStr.includes('"type": "metadata"') || 
+                                        (chunkStr.includes('"kg_data"') && chunkStr.includes('"agent_selection"'))) {
+                                        continue;
+                                    }
+                                    
                                     // Remove any pondering action before adding to response
                                     hidePonderingAction();
 
                                     fullResponse += data.chunk || '';
                                     const contentDiv = aiMessageElement.querySelector('.message-content');
-                                    contentDiv.innerHTML = marked.parse(fullResponse);
-                                    hljs.highlightAll();
+                                    if (contentDiv) {
+                                        contentDiv.innerHTML = marked.parse(fullResponse);
+                                        hljs.highlightAll();
+                                        
+                                        // Ensure content is visible and scrollable
+                                        contentDiv.style.maxHeight = 'none';
+                                        contentDiv.style.overflow = 'visible';
+                                    }
                                 }
 
-                                scrollToBottom();
+                                // Scroll after a brief delay to ensure DOM is updated
+                                setTimeout(() => scrollToBottom(), 50);
                             } catch (e) {
                                 console.error('Error parsing JSON:', e);
                             }
@@ -1662,15 +1729,26 @@
         }
 
         function scrollToBottom() {
-            // Use requestAnimationFrame for smoother scrolling on mobile
+            // Use requestAnimationFrame for smoother scrolling
             requestAnimationFrame(() => {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                // Also try smooth scroll if supported
-                if (chatMessages.scrollTo) {
-                    chatMessages.scrollTo({
-                        top: chatMessages.scrollHeight,
-                        behavior: 'smooth'
-                    });
+                try {
+                    // Force scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Also try smooth scroll if supported
+                    if (chatMessages.scrollTo) {
+                        chatMessages.scrollTo({
+                            top: chatMessages.scrollHeight,
+                            behavior: 'auto' // Use 'auto' for immediate scroll, 'smooth' can cause issues
+                        });
+                    }
+                    
+                    // Additional fallback for stubborn scrolling
+                    setTimeout(() => {
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 100);
+                } catch (e) {
+                    console.error('Scroll error:', e);
                 }
             });
         }

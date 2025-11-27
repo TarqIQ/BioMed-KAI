@@ -653,10 +653,24 @@ class MedicalAgentOrchestrator:
         selected_score = scores.get(selected_agent, 0.0)
         max_score = max(scores.values()) if scores.values() else 0.0
         
+        # Normalize percentage (scores are already in 0-100 range from the percentage calculation)
+        # If score > 100, it means it's already a percentage, otherwise it's a raw score
+        if selected_score > 100:
+            percentage = selected_score / 100.0  # Convert from percentage to decimal
+            percentage_display = f"{selected_score:.1f}%"
+        elif selected_score > 1:
+            # Already a percentage (0-100)
+            percentage = selected_score / 100.0
+            percentage_display = f"{selected_score:.1f}%"
+        else:
+            # Raw score (0-1)
+            percentage = selected_score
+            percentage_display = f"{selected_score * 100:.1f}%"
+        
         # Generate reason based on selection method and scores
-        if selected_score > 0.7:
+        if percentage > 0.7:
             confidence = "high"
-        elif selected_score > 0.5:
+        elif percentage > 0.5:
             confidence = "moderate"
         else:
             confidence = "low"
@@ -664,9 +678,9 @@ class MedicalAgentOrchestrator:
         agent_display = selected_agent.replace("_", " ").title()
         
         if max_score == selected_score and len([s for s in scores.values() if s == max_score]) == 1:
-            return f"{agent_display} was selected with {confidence} confidence ({selected_score:.0%} match) based on query analysis."
+            return f"{agent_display} was selected with {confidence} confidence ({percentage_display} match) based on query analysis."
         else:
-            return f"{agent_display} was selected as the best match ({selected_score:.0%}) for this query type."
+            return f"{agent_display} was selected as the best match ({percentage_display}) for this query type."
     
     async def _determine_agent(self, query: str) -> str:
         """Determine which agent should handle the query using BM25 algorithm"""
