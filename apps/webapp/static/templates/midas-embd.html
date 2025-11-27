@@ -421,19 +421,46 @@
                 -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
                 /* Ensure chat is scrollable */
                 position: relative;
+                /* Ensure minimum height so chat is always visible */
+                min-height: 200px;
             }
 
             .suggestion-grid {
                 grid-template-columns: 1fr;
-                gap: 0.75rem;
-                margin-bottom: 0.75rem;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+                max-height: 120px;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Hide suggestions when there are messages on mobile */
+            .has-messages #suggestion-section {
+                display: none !important;
+            }
+
+            /* Also hide on very small screens even without messages if they take too much space */
+            @media (max-height: 600px) {
+                #suggestion-section {
+                    max-height: 80px;
+                    overflow-y: auto;
+                }
             }
 
             .input-section {
                 flex-shrink: 0;
-                padding: 1rem;
+                padding: 0.75rem;
                 position: relative;
                 z-index: 10;
+                /* Limit max height to ensure chat is visible */
+                max-height: 40vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* When suggestions are hidden, reduce input section height */
+            .has-messages .input-section {
+                max-height: 25vh;
             }
 
             .modern-header {
@@ -477,8 +504,26 @@
 
             /* Compact suggestion cards on mobile */
             .suggestion-card {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+                line-height: 1.3;
+            }
+
+            /* Make input form more compact on mobile */
+            #chat-form {
+                gap: 0.5rem;
+            }
+
+            /* Reduce input section padding when suggestions are hidden */
+            .has-messages .input-section {
                 padding: 0.75rem;
-                font-size: 0.875rem;
+            }
+
+            /* Ensure chat messages are always accessible */
+            .chat-container:empty::before {
+                content: '';
+                display: block;
+                min-height: 100px;
             }
 
             /* Adjust header on mobile */
@@ -784,6 +829,8 @@
                 "chat_history": []
             };
             chatHistory = [];
+            // Show suggestions again when starting new chat
+            document.body.classList.remove('has-messages');
             addMessage('ai', 'Hello! I\'m BioMed-KAI, your AI assistant for precision medicine. How can I help you today?');
         });
 
@@ -1119,6 +1166,11 @@
             messageContainer.appendChild(bubble);
             messageDiv.appendChild(messageContainer);
             chatMessages.appendChild(messageDiv);
+
+            // Hide suggestions on mobile after first user message
+            if (sender === 'user' && window.innerWidth <= 768) {
+                document.body.classList.add('has-messages');
+            }
 
             if (sender === 'ai' && text) {
                 hljs.highlightAll();
