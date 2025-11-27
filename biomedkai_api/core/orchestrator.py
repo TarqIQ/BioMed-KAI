@@ -453,20 +453,16 @@ class MedicalAgentOrchestrator:
             
             yield f"<||action||>👨‍⚕️ **{agent_name.title()} Agent** responding:\n\n"
             
-            # Step 3: Send metadata to frontend
+            # Step 3: Prepare smart metadata for frontend (only essential info)
             metadata = {
                 "type": "metadata",
-                "kg_data": {
-                    "entities": kg_results.get("entities", [])[:10] if kg_results else [],  # Limit to top 10
-                    "relationships": kg_results.get("relationships", [])[:10] if kg_results else [],
-                    "entity_count": len(kg_results.get("entities", [])) if kg_results else 0,
-                    "relationship_count": len(kg_results.get("relationships", [])) if kg_results else 0
-                },
-                "references": references,
+                "kg_data": self._extract_essential_kg_data(kg_results),
+                "references": self._extract_essential_references(references),
                 "agent_selection": {
                     "selected_agent": selected_agent,
                     "scores": agent_scores,
-                    "selection_method": "BM25" if any(s > 0.5 for s in agent_scores.values() if isinstance(s, (int, float))) else "keyword_fallback"
+                    "selection_method": "BM25" if any(s > 0.5 for s in agent_scores.values() if isinstance(s, (int, float))) else "keyword_fallback",
+                    "reason": self._get_agent_selection_reason(selected_agent, agent_scores, query)
                 }
             }
             # Send metadata as JSON in the stream
@@ -569,6 +565,108 @@ class MedicalAgentOrchestrator:
                 unique_refs.append(ref)
         
         return unique_refs[:20]  # Limit to top 20 references
+    
+    def _extract_essential_kg_data(self, kg_results: Dict[str, Any]) -> Dict[str, Any]:
+        """Extract only essential KG data for UI display (not the entire dump)"""
+        if not kg_results:
+            return {
+                "major_entities": [],
+                "entity_count": 0,
+                "relationship_count": 0
+            }
+        
+        entities = kg_results.get("entities", [])
+        relationships = kg_results.get("relationships", [])
+        
+        # Extract only essential info from entities (name, type, score if available)
+        major_entities = []
+        seen_entities = set()
+        
+        # Handle different entity formats
+        entity_list = entities if isinstance(entities, list) else []
+        
+        for entity in entity_list[:10]:  # Top 10 only
+            if isinstance(entity, dict):
+                # Get entity name - try multiple possible keys
+                name = (entity.get("name") or 
+                       entity.get("text") or 
+                       entity.get("label") or 
+                       entity.get("DisplayName") or
+                       entity.get("properties", {}).get("name") if isinstance(entity.get("properties"), dict) else None or
+                       "Unknown")
+                
+                # Get entity type
+                entity_type = (entity.get("type") or 
+                             entity.get("NodeType") or 
+                             entity.get("label") or
+                             entity.get("metadata") or
+                             "Unknown")
+                
+                # Get score if available
+                score = entity.get("score", 0.0)
+                if not isinstance(score, (int, float)):
+                    score = 0.0
+                
+                # Create unique key
+                name_str = str(name).strip()
+                type_str = str(entity_type).strip()
+                entity_key = f"{name_str}_{type_str}".lower()
+                
+                if entity_key not in seen_entities and name_str != "Unknown":
+                    seen_entities.add(entity_key)
+                    major_entities.append({
+                        "name": name_str[:100],  # Limit name length
+                        "type": type_str,
+                        "score": float(score)
+                    })
+        
+        return {
+            "major_entities": major_entities,
+            "entity_count": len(entity_list),
+            "relationship_count": len(relationships) if isinstance(relationships, list) else 0
+        }
+    
+    def _extract_essential_references(self, references: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Extract only essential reference info"""
+        essential_refs = []
+        seen = set()
+        
+        for ref in references[:10]:  # Top 10 only
+            if isinstance(ref, dict):
+                source = ref.get("source") or ref.get("publication_link") or ""
+                if source and source not in seen:
+                    seen.add(source)
+                    essential_refs.append({
+                        "source": str(source)[:200],  # Limit length
+                        "pmid": ref.get("pmid") or ref.get("PMID", ""),
+                        "pmc_id": ref.get("pmc_id") or ref.get("PMC_ID", "")
+                    })
+        
+        return essential_refs
+    
+    def _get_agent_selection_reason(self, selected_agent: str, scores: Dict[str, float], query: str) -> str:
+        """Generate a human-readable reason for agent selection"""
+        if not scores:
+            return "Default agent selected"
+        
+        # Get the score for selected agent
+        selected_score = scores.get(selected_agent, 0.0)
+        max_score = max(scores.values()) if scores.values() else 0.0
+        
+        # Generate reason based on selection method and scores
+        if selected_score > 0.7:
+            confidence = "high"
+        elif selected_score > 0.5:
+            confidence = "moderate"
+        else:
+            confidence = "low"
+        
+        agent_display = selected_agent.replace("_", " ").title()
+        
+        if max_score == selected_score and len([s for s in scores.values() if s == max_score]) == 1:
+            return f"{agent_display} was selected with {confidence} confidence ({selected_score:.0%} match) based on query analysis."
+        else:
+            return f"{agent_display} was selected as the best match ({selected_score:.0%}) for this query type."
     
     async def _determine_agent(self, query: str) -> str:
         """Determine which agent should handle the query using BM25 algorithm"""

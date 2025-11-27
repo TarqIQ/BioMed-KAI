@@ -1214,17 +1214,18 @@
                                 }
 
                                 // Handle metadata - check if it's a metadata object
+                                // IMPORTANT: Store metadata but DO NOT display in response bubble
                                 if (data && data.type === 'metadata') {
                                     metadata = data;
                                     displayMetadata(aiMessageElement, data);
-                                    continue;
+                                    continue; // Skip - don't add to response
                                 }
                                 
                                 // Also check if the entire data object is metadata (in case it's not wrapped)
                                 if (data && data.kg_data && data.agent_selection) {
                                     metadata = { type: 'metadata', ...data };
                                     displayMetadata(aiMessageElement, metadata);
-                                    continue;
+                                    continue; // Skip - don't add to response
                                 }
 
                                 // Handle pondering actions
@@ -1253,6 +1254,11 @@
                                 }
 
                                 if (data.chunk) {
+                                    // Skip if this is metadata (shouldn't happen, but safety check)
+                                    if (data.type === 'metadata' || (data.kg_data && data.agent_selection)) {
+                                        continue;
+                                    }
+                                    
                                     // Remove any pondering action before adding to response
                                     hidePonderingAction();
 
@@ -1784,20 +1790,28 @@
             const content = document.createElement('div');
             content.className = 'insights-modal-content';
             
-            // Add metadata sections
-            if (metadata.kg_data) {
-                const kgSection = createKGSection(metadata.kg_data);
-                content.appendChild(kgSection);
+            // 1. Selected Agent Section (always show first)
+            if (metadata.agent_selection) {
+                const agentSection = createSelectedAgentSection(metadata.agent_selection);
+                content.appendChild(agentSection);
             }
             
+            // 2. Fetched Entities Section (major entities only)
+            if (metadata.kg_data && metadata.kg_data.major_entities && metadata.kg_data.major_entities.length > 0) {
+                const entitiesSection = createFetchedEntitiesSection(metadata.kg_data);
+                content.appendChild(entitiesSection);
+            }
+            
+            // 3. References Section
             if (metadata.references && metadata.references.length > 0) {
                 const refSection = createReferencesSection(metadata.references);
                 content.appendChild(refSection);
             }
             
-            if (metadata.agent_selection) {
-                const agentSection = createAgentSelectionSection(metadata.agent_selection);
-                content.appendChild(agentSection);
+            // 4. Additional Insights (agent scores if needed)
+            if (metadata.agent_selection && metadata.agent_selection.scores) {
+                const insightsSection = createAdditionalInsightsSection(metadata.agent_selection);
+                content.appendChild(insightsSection);
             }
             
             modal.appendChild(header);
@@ -1827,31 +1841,197 @@
             document.addEventListener('keydown', escapeHandler);
         }
 
-            // Knowledge Graph Data Section
-            if (metadata.kg_data) {
-                const kgSection = createKGSection(metadata.kg_data);
-                metadataContainer.appendChild(kgSection);
+        function createSelectedAgentSection(agentSelection) {
+            const section = document.createElement('div');
+            section.className = 'metadata-section';
+
+            const header = document.createElement('div');
+            header.className = 'metadata-header active'; // Start expanded
+            header.innerHTML = `
+                <div class="metadata-title">
+                    <i class="fas fa-robot"></i>
+                    <span>Selected Agent</span>
+                </div>
+                <i class="fas fa-chevron-down metadata-toggle"></i>
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'metadata-content expanded'; // Start expanded
+
+            const agentName = formatAgentName(agentSelection.selected_agent || 'Unknown');
+            const reason = agentSelection.reason || 'Agent was selected based on query analysis.';
+            const method = agentSelection.selection_method || 'Unknown';
+
+            content.innerHTML = `
+                <div class="metadata-item" style="margin-bottom: 1rem;">
+                    <div class="metadata-label">Agent</div>
+                    <div class="metadata-value" style="color: #10b981; font-weight: 600; font-size: 1.1rem;">
+                        <i class="fas fa-check-circle"></i> ${agentName}
+                    </div>
+                </div>
+                <div class="metadata-item" style="margin-bottom: 1rem;">
+                    <div class="metadata-label">Reason</div>
+                    <div class="metadata-value">${reason}</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Selection Method</div>
+                    <div class="metadata-value" style="font-size: 0.9rem; color: #94a3b8;">
+                        ${method === 'BM25' ? '<i class="fas fa-brain"></i> Semantic Matching (BM25)' : '<i class="fas fa-key"></i> Keyword-based Matching'}
+                    </div>
+                </div>
+            `;
+
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                content.classList.toggle('expanded');
+            });
+
+            section.appendChild(header);
+            section.appendChild(content);
+            return section;
+        }
+
+        function createFetchedEntitiesSection(kgData) {
+            const section = document.createElement('div');
+            section.className = 'metadata-section';
+
+            const header = document.createElement('div');
+            header.className = 'metadata-header';
+            header.innerHTML = `
+                <div class="metadata-title">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Fetched Entities (${kgData.major_entities ? kgData.major_entities.length : 0})</span>
+                </div>
+                <i class="fas fa-chevron-down metadata-toggle"></i>
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'metadata-content';
+
+            // Stats
+            if (kgData.entity_count !== undefined || kgData.relationship_count !== undefined) {
+                const stats = document.createElement('div');
+                stats.className = 'metadata-stats';
+                stats.innerHTML = `
+                    <div class="metadata-stat">
+                        <div class="metadata-stat-value">${kgData.entity_count || 0}</div>
+                        <div class="metadata-stat-label">Total Entities</div>
+                    </div>
+                    <div class="metadata-stat">
+                        <div class="metadata-stat-value">${kgData.relationship_count || 0}</div>
+                        <div class="metadata-stat-label">Relationships</div>
+                    </div>
+                `;
+                content.appendChild(stats);
             }
 
-            // References Section
-            if (metadata.references && metadata.references.length > 0) {
-                const refSection = createReferencesSection(metadata.references);
-                metadataContainer.appendChild(refSection);
+            // Major entities only
+            if (kgData.major_entities && kgData.major_entities.length > 0) {
+                const entitiesTitle = document.createElement('div');
+                entitiesTitle.className = 'metadata-label';
+                entitiesTitle.style.marginTop = '1rem';
+                entitiesTitle.innerHTML = '<i class="fas fa-tags mr-2"></i>Major Entities Found:';
+                content.appendChild(entitiesTitle);
+
+                const entitiesContainer = document.createElement('div');
+                entitiesContainer.style.marginBottom = '1rem';
+                entitiesContainer.style.marginTop = '0.5rem';
+                
+                kgData.major_entities.forEach(entity => {
+                    const entityDiv = document.createElement('div');
+                    entityDiv.className = 'metadata-item';
+                    entityDiv.style.marginBottom = '0.5rem';
+                    
+                    const scoreBadge = entity.score > 0 ? 
+                        `<span style="font-size: 0.75rem; color: #94a3b8; margin-left: 0.5rem;">(${(entity.score * 100).toFixed(0)}% match)</span>` : '';
+                    
+                    entityDiv.innerHTML = `
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <span class="entity-badge" style="font-weight: 600;">${entity.name}</span>
+                                <span style="font-size: 0.8rem; color: #94a3b8; margin-left: 0.5rem;">${entity.type}</span>
+                            </div>
+                            ${scoreBadge}
+                        </div>
+                    `;
+                    entitiesContainer.appendChild(entityDiv);
+                });
+                content.appendChild(entitiesContainer);
+            } else {
+                const noEntities = document.createElement('div');
+                noEntities.className = 'metadata-value';
+                noEntities.style.color = '#94a3b8';
+                noEntities.style.fontStyle = 'italic';
+                noEntities.textContent = 'No major entities found in knowledge graph.';
+                content.appendChild(noEntities);
             }
 
-            // Agent Selection Section
-            if (metadata.agent_selection) {
-                const agentSection = createAgentSelectionSection(metadata.agent_selection);
-                metadataContainer.appendChild(agentSection);
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                content.classList.toggle('expanded');
+            });
+
+            section.appendChild(header);
+            section.appendChild(content);
+            return section;
+        }
+
+        function createAdditionalInsightsSection(agentSelection) {
+            const section = document.createElement('div');
+            section.className = 'metadata-section';
+
+            const header = document.createElement('div');
+            header.className = 'metadata-header';
+            header.innerHTML = `
+                <div class="metadata-title">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Agent Selection Scores</span>
+                </div>
+                <i class="fas fa-chevron-down metadata-toggle"></i>
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'metadata-content';
+
+            if (agentSelection.scores) {
+                const scoresTitle = document.createElement('div');
+                scoresTitle.className = 'metadata-label';
+                scoresTitle.innerHTML = '<i class="fas fa-percentage mr-2"></i>Match Scores for All Agents:';
+                scoresTitle.style.marginBottom = '0.75rem';
+                content.appendChild(scoresTitle);
+
+                const sortedAgents = Object.entries(agentSelection.scores)
+                    .sort((a, b) => (b[1] || 0) - (a[1] || 0));
+
+                sortedAgents.forEach(([agentName, score]) => {
+                    const isSelected = agentName === agentSelection.selected_agent;
+                    const scoreBar = document.createElement('div');
+                    scoreBar.className = 'agent-score-bar';
+                    if (isSelected) {
+                        scoreBar.style.background = 'rgba(16, 185, 129, 0.1)';
+                        scoreBar.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+                    }
+                    
+                    const percentage = typeof score === 'number' ? score : 0;
+                    scoreBar.innerHTML = `
+                        <div class="agent-score-label">${formatAgentName(agentName)}</div>
+                        <div class="agent-score-bar-container">
+                            <div class="agent-score-bar-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="agent-score-value ${isSelected ? 'selected' : ''}">${percentage.toFixed(1)}%</div>
+                    `;
+                    content.appendChild(scoreBar);
+                });
             }
 
-            // Append to message element
-            const messageContainer = messageElement.querySelector('.ai-bubble');
-            if (messageContainer) {
-                messageContainer.appendChild(metadataContainer);
-            }
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                content.classList.toggle('expanded');
+            });
 
-            scrollToBottom();
+            section.appendChild(header);
+            section.appendChild(content);
+            return section;
         }
 
         function createKGSection(kgData) {
