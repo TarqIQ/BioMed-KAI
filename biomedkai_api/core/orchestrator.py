@@ -1,7 +1,8 @@
 import asyncio
-from typing import Dict, List, Any, Optional, AsyncGenerator
+from typing import Dict, List, Any, Optional, AsyncGenerator, Tuple
 import uuid
 from datetime import datetime
+import json
 
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
@@ -401,6 +402,10 @@ class MedicalAgentOrchestrator:
         """
         
         session_id = str(uuid.uuid4())
+        kg_results = {}
+        agent_scores = {}
+        selected_agent = "supervisor"
+        references = []
         
         try:
             # Step 1: Get context from knowledge graph
@@ -419,6 +424,9 @@ class MedicalAgentOrchestrator:
                 entities_found = len(kg_results.get("entities", []))
                 relationships_found = len(kg_results.get("relationships", []))
                 
+                # Extract references/publications from KG results
+                references = self._extract_references(kg_results)
+                
                 yield f"<||action||> ✅ Found {entities_found} entities and {relationships_found} relationships\n\n"
             else:
                 context_info = ""
@@ -427,21 +435,44 @@ class MedicalAgentOrchestrator:
             # Step 2: Determine the right agent based on query
             yield "<||action||> 🤖 Analyzing query and selecting appropriate agent...\n"
             
-            agent_name = await self._determine_agent(query)
+            agent_name, all_scores = await self._determine_agent_with_scores(query)
+            agent_scores = all_scores
+            selected_agent = agent_name
             agent = self.agents.get(agent_name)
             
             if not agent:
                 agent = self.agents.get("supervisor")
                 agent_name = "supervisor"
+                selected_agent = "supervisor"
             
             yield f"<||action||>👨‍⚕️ **{agent_name.title()} Agent** responding:\n\n"
             
-            # Step 3: Prepare enhanced prompt with context
+            # Step 3: Send metadata to frontend
+            metadata = {
+                "type": "metadata",
+                "kg_data": {
+                    "entities": kg_results.get("entities", [])[:10] if kg_results else [],  # Limit to top 10
+                    "relationships": kg_results.get("relationships", [])[:10] if kg_results else [],
+                    "entity_count": len(kg_results.get("entities", [])) if kg_results else 0,
+                    "relationship_count": len(kg_results.get("relationships", [])) if kg_results else 0
+                },
+                "references": references,
+                "agent_selection": {
+                    "selected_agent": selected_agent,
+                    "scores": agent_scores,
+                    "selection_method": "BM25" if any(s > 0.5 for s in agent_scores.values() if isinstance(s, (int, float))) else "keyword_fallback"
+                }
+            }
+            # Send metadata as JSON in the stream
+            metadata_json = json.dumps(metadata)
+            yield f"data: {metadata_json}\n\n"
+            
+            # Step 4: Prepare enhanced prompt with context
             enhanced_prompt = self._create_enhanced_prompt(query, context_info, kg_results)
             enhanced_prompt = agent._get_system_prompt()
             # substitue query in the {input_query} in the enhanced_prompt
             enhanced_prompt = enhanced_prompt.replace("{input_query}", query) 
-            # Step 4: Stream response from the selected agent
+            # Step 5: Stream response from the selected agent
             chat_history = []
             
             async for chunk in self.model.generate_with_context(
@@ -451,7 +482,7 @@ class MedicalAgentOrchestrator:
             ):
                 yield chunk
                 
-            # Step 5: Store in memory if needed
+            # Step 6: Store in memory if needed
             if self.memory_system:
                 await self.memory_system.add_conversation_entry(
                     session_id=session_id,
@@ -468,8 +499,62 @@ class MedicalAgentOrchestrator:
             # yield f"\n❌ **Error**: {str(e)}\n"
             yield "<||action||> ❌ An error occurred while processing your query. Please try again later.\n"
     
+    def _extract_references(self, kg_results: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Extract publication references from KG results"""
+        references = []
+        entities = kg_results.get("entities", [])
+        relationships = kg_results.get("relationships", [])
+        
+        # Extract from entities
+        for entity in entities:
+            if isinstance(entity, dict):
+                # Check for publication fields
+                if "publication" in entity:
+                    pub = entity["publication"]
+                    if isinstance(pub, str) and pub:
+                        references.append({
+                            "type": "publication",
+                            "source": pub,
+                            "entity": entity.get("name", "Unknown")
+                        })
+                # Check for publication_link or similar fields
+                if "publication_link" in entity:
+                    references.append({
+                        "type": "publication",
+                        "source": entity.get("publication_link", ""),
+                        "entity": entity.get("name", "Unknown"),
+                        "pmid": entity.get("PMID", ""),
+                        "pmc_id": entity.get("PMC_ID", "")
+                    })
+        
+        # Extract from relationships
+        for rel in relationships:
+            if isinstance(rel, dict):
+                if "publication" in rel:
+                    references.append({
+                        "type": "publication",
+                        "source": rel["publication"],
+                        "relationship": rel.get("type", "Unknown")
+                    })
+        
+        # Deduplicate references
+        seen = set()
+        unique_refs = []
+        for ref in references:
+            key = ref.get("source", "")
+            if key and key not in seen:
+                seen.add(key)
+                unique_refs.append(ref)
+        
+        return unique_refs[:20]  # Limit to top 20 references
+    
     async def _determine_agent(self, query: str) -> str:
         """Determine which agent should handle the query using BM25 algorithm"""
+        agent_name, _ = await self._determine_agent_with_scores(query)
+        return agent_name
+    
+    async def _determine_agent_with_scores(self, query: str) -> Tuple[str, Dict[str, float]]:
+        """Determine which agent should handle the query using BM25 algorithm and return all scores"""
         
         # Preprocess function
         def preprocess_text(text: str) -> List[str]:
@@ -604,6 +689,27 @@ class MedicalAgentOrchestrator:
         
         # Find the best matching agent
         print("BM25 scores:", scores, agent_mapping)
+        
+        # Calculate normalized scores per agent
+        agent_scores_dict = {}
+        if len(scores) > 0:
+            # Group scores by agent
+            for idx, agent_name in enumerate(agent_mapping):
+                if agent_name not in agent_scores_dict:
+                    agent_scores_dict[agent_name] = []
+                agent_scores_dict[agent_name].append(float(scores[idx]))
+            
+            # Get max score per agent
+            agent_max_scores = {agent: max(scores_list) for agent, scores_list in agent_scores_dict.items()}
+            
+            # Normalize scores to percentages (0-100)
+            max_score = max(agent_max_scores.values()) if agent_max_scores.values() else 1.0
+            agent_percentages = {
+                agent: (score / max_score * 100) if max_score > 0 else 0.0
+                for agent, score in agent_max_scores.items()
+            }
+        else:
+            agent_percentages = {}
 
         if len(scores) > 0:
             best_match_idx = scores.argmax()
@@ -620,7 +726,7 @@ class MedicalAgentOrchestrator:
                     query=query[:100],
                     session_id=getattr(self, 'current_session_id', None)
                 )
-                return best_agent
+                return best_agent, agent_percentages
         
         # Fallback to keyword-based matching if BM25 score is too low
         self.logger.info(
@@ -691,15 +797,23 @@ class MedicalAgentOrchestrator:
         # Return the agent with the highest score
         if max(agent_scores.values()) > 0:
             best_agent = max(agent_scores, key=agent_scores.get)
+            
+            # Normalize keyword scores to percentages
+            max_keyword_score = max(agent_scores.values())
+            keyword_percentages = {
+                agent: (score / max_keyword_score * 100) if max_keyword_score > 0 else 0.0
+                for agent, score in agent_scores.items()
+            }
+            
             self.logger.info(
                 f"Keyword-based agent selection: {best_agent}",
                 scores=agent_scores,
                 query=query[:100]
             )
-            return best_agent
+            return best_agent, keyword_percentages
         
         # Final fallback to supervisor
-        return "supervisor"
+        return "supervisor", {"supervisor": 100.0}
     
     def _create_enhanced_prompt(self, query: str, context: str, kg_results: Dict[str, Any]) -> str:
         """Create an enhanced prompt with context"""
