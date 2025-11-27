@@ -1578,16 +1578,25 @@
                 insightsButton.title = 'View insights';
                 insightsButton.dataset.messageId = messageId;
                 insightsButton.id = `insights-btn-${messageId}`; // Add ID for easier lookup
+                insightsButton.dataset.insightsButton = 'true'; // Mark as insights button
                 insightsButton.addEventListener('click', () => {
-                    const metadata = insightsButton.dataset.metadata || messageDiv.dataset.metadata;
+                    // Try multiple sources for metadata
+                    const metadata = insightsButton.dataset.metadata || 
+                                   messageDiv.dataset.metadata ||
+                                   (messageDiv.querySelector('[data-metadata]')?.dataset.metadata);
                     if (metadata) {
                         try {
                             showInsightsModal(JSON.parse(metadata));
                         } catch (e) {
                             console.error('Error parsing metadata:', e);
                         }
+                    } else {
+                        console.warn('No metadata found for insights button');
                     }
                 });
+                
+                // Store button reference in messageDiv for easy access
+                messageDiv.insightsButton = insightsButton;
 
                 const thumbsUpButton = document.createElement('button');
                 thumbsUpButton.innerHTML = '<i class="far fa-thumbs-up"></i>';
@@ -1874,68 +1883,164 @@
         function displayMetadata(messageElement, metadata) {
             // messageElement could be the bubble or messageDiv, find the actual messageDiv
             let messageDiv = messageElement;
-            if (!messageDiv.dataset.messageId) {
+            if (!messageDiv || !messageDiv.dataset) {
+                console.warn('Invalid messageElement:', messageElement);
+                return;
+            }
+            
+            if (!messageDiv.dataset.messageId && !messageDiv.classList.contains('message')) {
                 // If it's the bubble, find the parent messageDiv
                 messageDiv = messageElement.closest('.message[data-message-id]') || messageElement.closest('.message');
             }
             
             if (!messageDiv) {
-                console.warn('Could not find messageDiv for metadata');
+                console.warn('Could not find messageDiv for metadata', messageElement);
                 return;
             }
             
-            // Store metadata in messageDiv
-            messageDiv.dataset.metadata = JSON.stringify(metadata);
+            // Store metadata in messageDiv (multiple places for redundancy)
+            const metadataJson = JSON.stringify(metadata);
+            messageDiv.dataset.metadata = metadataJson;
             
-            // Find insights button - try multiple selectors
+            // Also store in a data attribute on the messageDiv itself
+            const metadataAttr = document.createAttribute('data-metadata');
+            metadataAttr.value = metadataJson;
+            messageDiv.setAttributeNode(metadataAttr);
+            
+            // Find insights button - try multiple methods
             const messageId = messageDiv.dataset.messageId || messageDiv.dataset.id;
             let insightsButton = null;
             
-            if (messageId) {
-                // Try by ID first
+            // Method 1: Direct reference (if stored)
+            if (messageDiv.insightsButton) {
+                insightsButton = messageDiv.insightsButton;
+            }
+            
+            // Method 2: By ID
+            if (!insightsButton && messageId) {
                 insightsButton = document.getElementById(`insights-btn-${messageId}`);
             }
             
-            // Fallback: search within messageDiv
+            // Method 3: By data attribute within messageDiv
             if (!insightsButton) {
-                insightsButton = messageDiv.querySelector('[data-message-id]');
+                insightsButton = messageDiv.querySelector('[data-insights-button="true"]');
             }
             
-            // Fallback: search by class
+            // Method 4: By messageId attribute within messageDiv
+            if (!insightsButton && messageId) {
+                insightsButton = messageDiv.querySelector(`[data-message-id="${messageId}"]`);
+            }
+            
+            // Method 5: Any button with insights-button-hidden class
             if (!insightsButton) {
                 insightsButton = messageDiv.querySelector('.insights-button-hidden');
             }
             
+            // Method 6: Any button in actions div
+            if (!insightsButton) {
+                const actionsDiv = messageDiv.querySelector('.message-actions');
+                if (actionsDiv) {
+                    insightsButton = actionsDiv.querySelector('[data-message-id]') || 
+                                   actionsDiv.querySelector('button[title*="insights" i]');
+                }
+            }
+            
             if (insightsButton) {
-                insightsButton.dataset.metadata = JSON.stringify(metadata);
+                insightsButton.dataset.metadata = metadataJson;
                 insightsButton.classList.remove('insights-button-hidden');
                 insightsButton.style.display = 'inline-flex'; // Force display
-                console.log('Insights button shown for message:', messageId, insightsButton);
+                insightsButton.style.visibility = 'visible'; // Ensure visible
+                console.log('✅ Insights button shown for message:', messageId, insightsButton);
             } else {
-                // If button doesn't exist yet, try again after a delay with multiple attempts
+                // If button doesn't exist yet, try again with multiple attempts
+                console.warn('⚠️ Insights button not found immediately, retrying...', messageId);
                 let attempts = 0;
-                const maxAttempts = 5;
+                const maxAttempts = 10; // More attempts
                 const findButton = () => {
                     attempts++;
-                    const btn = document.getElementById(`insights-btn-${messageId}`) || 
-                               messageDiv.querySelector(`[data-message-id="${messageId}"]`) ||
-                               messageDiv.querySelector('[data-message-id]') ||
-                               messageDiv.querySelector('.insights-button-hidden');
-                    if (btn) {
-                        btn.dataset.metadata = JSON.stringify(metadata);
+                    
+                    // Try all methods again
+                    let btn = messageDiv.insightsButton ||
+                             (messageId ? document.getElementById(`insights-btn-${messageId}`) : null) ||
+                             messageDiv.querySelector('[data-insights-button="true"]') ||
+                             (messageId ? messageDiv.querySelector(`[data-message-id="${messageId}"]`) : null) ||
+                             messageDiv.querySelector('.insights-button-hidden') ||
+                             messageDiv.querySelector('.message-actions button');
+                    
+                    if (btn && (btn.dataset.messageId || btn.id)) {
+                        btn.dataset.metadata = metadataJson;
                         btn.classList.remove('insights-button-hidden');
-                        btn.style.display = 'inline-flex'; // Force display
-                        console.log('Insights button shown (delayed attempt', attempts, ') for message:', messageId, btn);
+                        btn.style.display = 'inline-flex';
+                        btn.style.visibility = 'visible';
+                        console.log('✅ Insights button shown (attempt', attempts, ') for message:', messageId, btn);
                     } else if (attempts < maxAttempts) {
-                        setTimeout(findButton, 100);
+                        setTimeout(findButton, 150);
                     } else {
-                        console.warn('Could not find insights button for message after', maxAttempts, 'attempts:', messageId);
-                        console.warn('MessageDiv:', messageDiv);
-                        console.warn('Available buttons:', messageDiv.querySelectorAll('button'));
+                        // Last resort: create the button if it doesn't exist
+                        console.warn('⚠️ Creating insights button as fallback for message:', messageId);
+                        createInsightsButtonFallback(messageDiv, messageId, metadataJson);
                     }
                 };
                 setTimeout(findButton, 100);
             }
+        }
+        
+        // Fallback function to create insights button if it doesn't exist
+        function createInsightsButtonFallback(messageDiv, messageId, metadataJson) {
+            // Find or create actions div
+            let actionsDiv = messageDiv.querySelector('.message-actions');
+            if (!actionsDiv) {
+                // Create actions div if it doesn't exist
+                actionsDiv = document.createElement('div');
+                actionsDiv.className = 'message-actions flex items-center gap-2 mt-3 ml-12';
+                const messageContainer = messageDiv.querySelector('.max-w-4xl') || messageDiv.lastElementChild;
+                if (messageContainer) {
+                    messageContainer.appendChild(actionsDiv);
+                } else {
+                    console.error('Cannot create actions div - no container found');
+                    return;
+                }
+            }
+            
+            // Create insights button
+            const insightsButton = document.createElement('button');
+            insightsButton.innerHTML = '<i class="fas fa-chart-line"></i>';
+            insightsButton.className = 'action-btn hover:text-cyan-400 p-2 rounded-lg text-xs';
+            insightsButton.title = 'View insights';
+            insightsButton.dataset.messageId = messageId;
+            insightsButton.id = `insights-btn-${messageId}`;
+            insightsButton.dataset.insightsButton = 'true';
+            insightsButton.dataset.metadata = metadataJson;
+            insightsButton.style.display = 'inline-flex';
+            
+            insightsButton.addEventListener('click', () => {
+                const metadata = insightsButton.dataset.metadata || messageDiv.dataset.metadata;
+                if (metadata) {
+                    try {
+                        showInsightsModal(JSON.parse(metadata));
+                    } catch (e) {
+                        console.error('Error parsing metadata:', e);
+                    }
+                }
+            });
+            
+            // Insert before thumbs buttons if they exist, otherwise append
+            const thumbsButtons = actionsDiv.querySelector('.fa-thumbs-up')?.closest('button');
+            if (thumbsButtons) {
+                actionsDiv.insertBefore(insightsButton, thumbsButtons);
+            } else {
+                // Add after copy button if exists
+                const copyButton = actionsDiv.querySelector('.fa-copy')?.closest('button');
+                if (copyButton) {
+                    copyButton.parentNode.insertBefore(insightsButton, copyButton.nextSibling);
+                } else {
+                    actionsDiv.appendChild(insightsButton);
+                }
+            }
+            
+            // Store reference
+            messageDiv.insightsButton = insightsButton;
+            console.log('✅ Created fallback insights button for message:', messageId, insightsButton);
         }
         
         function showInsightsModal(metadata) {
