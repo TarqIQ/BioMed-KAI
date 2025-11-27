@@ -846,6 +846,90 @@
             color: #94a3b8;
             margin-top: 0.25rem;
         }
+
+        /* Insights Modal Styles */
+        .insights-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .insights-modal-overlay.active {
+            opacity: 1;
+        }
+
+        .insights-modal {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 16px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .insights-modal-overlay.active .insights-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .insights-modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .insights-modal-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+        }
+
+        .insights-modal-close {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            color: var(--neon-cyan);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .insights-modal-close:hover {
+            background: rgba(6, 182, 212, 0.2);
+            transform: scale(1.1);
+        }
+
+        .insights-modal-content {
+            padding: 1.5rem;
+        }
+
+        .insights-button-hidden {
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -1190,8 +1274,8 @@
                 // Clean up pondering action
                 hidePonderingAction();
 
-                // Display metadata if not already displayed
-                if (metadata && !aiMessageElement.querySelector('.metadata-container')) {
+                // Store metadata for insights button
+                if (metadata) {
                     displayMetadata(aiMessageElement, metadata);
                 }
 
@@ -1378,6 +1462,18 @@
                 copyButton.title = 'Copy response';
                 copyButton.addEventListener('click', () => copyToClipboard(contentDiv.innerText));
 
+                const insightsButton = document.createElement('button');
+                insightsButton.innerHTML = '<i class="fas fa-chart-line"></i>';
+                insightsButton.className = 'action-btn hover:text-cyan-400 p-2 rounded-lg text-xs insights-button-hidden';
+                insightsButton.title = 'View insights';
+                insightsButton.dataset.messageId = messageId;
+                insightsButton.addEventListener('click', () => {
+                    const metadata = insightsButton.dataset.metadata || messageElement.dataset.metadata;
+                    if (metadata) {
+                        showInsightsModal(JSON.parse(metadata));
+                    }
+                });
+
                 const thumbsUpButton = document.createElement('button');
                 thumbsUpButton.innerHTML = '<i class="far fa-thumbs-up"></i>';
                 thumbsUpButton.className = 'action-btn hover:text-green-500 p-2 rounded-lg text-xs';
@@ -1397,6 +1493,7 @@
                 });
 
                 actionsDiv.appendChild(copyButton);
+                actionsDiv.appendChild(insightsButton);
                 actionsDiv.appendChild(thumbsUpButton);
                 actionsDiv.appendChild(thumbsDownButton);
                 messageContainer.appendChild(actionsDiv);
@@ -1633,16 +1730,102 @@
             setTimeout(scrollToBottom, 100);
         });
 
-        // Metadata Display Functions
+        // Metadata Display Functions - Store metadata for insights button
         function displayMetadata(messageElement, metadata) {
-            // Remove existing metadata if any
-            const existingMetadata = messageElement.querySelector('.metadata-container');
-            if (existingMetadata) {
-                existingMetadata.remove();
+            // Store metadata in the insights button instead of displaying directly
+            const insightsButton = messageElement.querySelector('[data-message-id]');
+            if (insightsButton) {
+                insightsButton.dataset.metadata = JSON.stringify(metadata);
+                insightsButton.classList.remove('insights-button-hidden');
+            } else {
+                // If button doesn't exist yet, store in message element for later
+                messageElement.dataset.metadata = JSON.stringify(metadata);
+                // Try to find button after a short delay
+                setTimeout(() => {
+                    const btn = messageElement.querySelector('[data-message-id]');
+                    if (btn) {
+                        btn.dataset.metadata = JSON.stringify(metadata);
+                        btn.classList.remove('insights-button-hidden');
+                    }
+                }, 100);
+            }
+        }
+        
+        function showInsightsModal(metadata) {
+            // Remove existing modal if any
+            const existingModal = document.getElementById('insights-modal-overlay');
+            if (existingModal) {
+                existingModal.remove();
             }
 
-            const metadataContainer = document.createElement('div');
-            metadataContainer.className = 'metadata-container';
+            // Create modal overlay
+            const overlay = document.createElement('div');
+            overlay.id = 'insights-modal-overlay';
+            overlay.className = 'insights-modal-overlay';
+            
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'insights-modal';
+            
+            // Modal header
+            const header = document.createElement('div');
+            header.className = 'insights-modal-header';
+            header.innerHTML = `
+                <div class="insights-modal-title">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Response Insights</span>
+                </div>
+                <button class="insights-modal-close" onclick="this.closest('.insights-modal-overlay').remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Modal content
+            const content = document.createElement('div');
+            content.className = 'insights-modal-content';
+            
+            // Add metadata sections
+            if (metadata.kg_data) {
+                const kgSection = createKGSection(metadata.kg_data);
+                content.appendChild(kgSection);
+            }
+            
+            if (metadata.references && metadata.references.length > 0) {
+                const refSection = createReferencesSection(metadata.references);
+                content.appendChild(refSection);
+            }
+            
+            if (metadata.agent_selection) {
+                const agentSection = createAgentSelectionSection(metadata.agent_selection);
+                content.appendChild(agentSection);
+            }
+            
+            modal.appendChild(header);
+            modal.appendChild(content);
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            
+            // Animate in
+            setTimeout(() => overlay.classList.add('active'), 10);
+            
+            // Close on overlay click
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                    setTimeout(() => overlay.remove(), 300);
+                }
+            });
+            
+            // Close on Escape key
+            const escapeHandler = (e) => {
+                if (e.key === 'Escape') {
+                    overlay.classList.remove('active');
+                    setTimeout(() => overlay.remove(), 300);
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+        }
 
             // Knowledge Graph Data Section
             if (metadata.kg_data) {

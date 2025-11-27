@@ -21,6 +21,7 @@ from ..agents.research_agent import ResearchAgent
 from ..agents.validation_agent import ValidationAgent
 from ..agents.web_search_agent import WebSearchAgent
 from ..agents.general_medical_agent import GeneralMedicalAgent
+from ..storage.chat_storage import ChatStorage
 from rank_bm25 import BM25Okapi
 import string
 import re
@@ -42,6 +43,7 @@ class MedicalAgentOrchestrator:
         self.config = config
         self.logger = structlog.get_logger(name="orchestrator")
         self.state_manager = StateManager()
+        self.chat_storage = ChatStorage()
         
         # Initialize agents
         self.agents = self._initialize_agents()
@@ -396,16 +398,20 @@ class MedicalAgentOrchestrator:
     async def process_query_direct(self, 
                                  query: str,
                                  patient_id: Optional[str] = None,
-                                 context: Optional[Dict[str, Any]] = None) -> AsyncGenerator[str, None]:
+                                 context: Optional[Dict[str, Any]] = None,
+                                 chat_id: Optional[str] = None,
+                                 user_id: Optional[str] = None) -> AsyncGenerator[str, None]:
         """
         Direct processing without complex workflow - for immediate streaming
         """
         
-        session_id = str(uuid.uuid4())
+        session_id = chat_id or str(uuid.uuid4())
         kg_results = {}
         agent_scores = {}
         selected_agent = "supervisor"
         references = []
+        full_response = ""
+        message_id = None
         
         try:
             # Step 1: Get context from knowledge graph
@@ -467,12 +473,16 @@ class MedicalAgentOrchestrator:
             metadata_json = json.dumps(metadata)
             yield f"data: {metadata_json}\n\n"
             
-            # Step 4: Prepare enhanced prompt with context
+            # Step 4: Save user message to database
+            self.chat_storage.save_chat(session_id, user_id=user_id)
+            self.chat_storage.save_message(session_id, "user", query)
+            
+            # Step 5: Prepare enhanced prompt with context
             enhanced_prompt = self._create_enhanced_prompt(query, context_info, kg_results)
             enhanced_prompt = agent._get_system_prompt()
             # substitue query in the {input_query} in the enhanced_prompt
             enhanced_prompt = enhanced_prompt.replace("{input_query}", query) 
-            # Step 5: Stream response from the selected agent
+            # Step 6: Stream response from the selected agent
             chat_history = []
             
             async for chunk in self.model.generate_with_context(
@@ -480,9 +490,21 @@ class MedicalAgentOrchestrator:
                 chat_history, 
                 use_rag=True  # We already have context
             ):
+                full_response += chunk
                 yield chunk
+            
+            # Step 7: Save assistant message and metadata to database
+            message_id = self.chat_storage.save_message(session_id, "assistant", full_response)
+            if message_id:
+                self.chat_storage.save_chat_metadata(
+                    chat_id=session_id,
+                    message_id=message_id,
+                    kg_data=metadata.get("kg_data"),
+                    references=metadata.get("references"),
+                    agent_selection=metadata.get("agent_selection")
+                )
                 
-            # Step 6: Store in memory if needed
+            # Step 8: Store in memory if needed
             if self.memory_system:
                 await self.memory_system.add_conversation_entry(
                     session_id=session_id,
@@ -688,7 +710,8 @@ class MedicalAgentOrchestrator:
         scores = bm25.get_scores(query_tokens)
         
         # Find the best matching agent
-        print("BM25 scores:", scores, agent_mapping)
+        # Log BM25 scores at debug level instead of printing
+        self.logger.debug("BM25 agent selection scores", scores=scores.tolist() if len(scores) > 0 else [], agent_mapping=agent_mapping)
         
         # Calculate normalized scores per agent
         agent_scores_dict = {}
@@ -718,7 +741,7 @@ class MedicalAgentOrchestrator:
             
             # Set a minimum threshold to avoid low-quality matches
             threshold = 0.5
-            print("Best agent:", best_agent, "with score:", best_score)
+            self.logger.debug("BM25 best agent", agent=best_agent, score=float(best_score))
             if best_score > threshold:
                 self.logger.info(
                     f"BM25 agent selection: {best_agent}",
@@ -733,8 +756,6 @@ class MedicalAgentOrchestrator:
             "BM25 score below threshold, using keyword fallback",
             query=query[:100]
         )
-
-        print("BM25 scores:", scores)
         
         # Enhanced keyword fallback with weighted scoring
         agent_scores = {
@@ -852,9 +873,11 @@ Please provide your response:"""
     async def process_query(self, 
                            query: str,
                            patient_id: Optional[str] = None,
-                           context: Optional[Dict[str, Any]] = None) -> AsyncGenerator[str, None]:
+                           context: Optional[Dict[str, Any]] = None,
+                           chat_id: Optional[str] = None,
+                           user_id: Optional[str] = None) -> AsyncGenerator[str, None]:
         """
         Main entry point - use direct processing for better streaming
         """
-        async for chunk in self.process_query_direct(query, patient_id, context):
+        async for chunk in self.process_query_direct(query, patient_id, context, chat_id, user_id):
             yield chunk

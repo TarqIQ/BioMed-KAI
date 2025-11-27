@@ -215,7 +215,6 @@ async def handle_chat_message(
     context = data.get("context", {})
     
     if not query:
-        print("Received empty message")
         logger.warning("Received empty message", session_id=session_id)
         await manager.send_message(session_id, {
             "type": "error",
@@ -235,8 +234,7 @@ async def handle_chat_message(
         "agent": "processing"
     })
 
-    print(f"Processing query: {query}")
-    logger.info("Processing chat message", session_id=session_id, query=query, patient_id=patient_id)
+    logger.info("Processing chat message", session_id=session_id, query=query[:100], patient_id=patient_id)
     
     try:
         # Generate unique message ID for this conversation
@@ -246,7 +244,16 @@ async def handle_chat_message(
         full_response = ""
         chunk_count = 0
         
-        async for chunk in orchestrator.process_query(query, patient_id, context):
+        # Extract user_id from data if available
+        user_id = data.get("user_id") or data.get("userId")
+        
+        async for chunk in orchestrator.process_query(
+            query=query, 
+            patient_id=patient_id, 
+            context=context,
+            chat_id=session_id,
+            user_id=user_id
+        ):
             chunk_count += 1
             full_response += chunk
 
