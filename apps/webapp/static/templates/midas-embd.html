@@ -10,27 +10,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* TarqIQ Dark Theme Base */
+        /* Biomedical Theme Base */
         :root {
-            --neon-cyan: #06b6d4;
-            --neon-purple: #8b5cf6;
-            --deep-bg: #030712;
-            --slate-900: #0f172a;
-            --slate-800: #1e293b;
-            --slate-700: #334155;
+            --medical-blue: #2563EB;
+            --medical-teal: #0891B2;
+            --medical-green: #059669;
+            --soft-blue: #E0F2FE;
+            --warm-white: #FEFEFE;
+            --soft-gray: #F1F5F9;
+            --medical-gray: #64748B;
+            --deep-blue: #1E40AF;
+            --accent-blue: #3B82F6;
+            --accent-teal: #0D9488;
+            --medical-purple: #6366F1;
+            --soft-green: #D1FAE5;
         }
 
         html,
         body {
             height: 100%;
-            font-family: 'Inter', sans-serif;
-            background: var(--deep-bg);
-            color: #e2e8f0;
+            font-family: 'Source Sans Pro', 'Lato', sans-serif;
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 30%, #F0FDF4 100%);
+            color: #1E293B;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            line-height: 1.7;
         }
 
         body {
@@ -41,64 +50,64 @@
             height: 100dvh; /* Dynamic viewport height for mobile */
         }
 
-        /* Enhanced Scrollbar - Dark Theme */
+        /* Enhanced Scrollbar - Biomedical Theme */
         ::-webkit-scrollbar {
             width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(241, 245, 249, 0.8);
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #0891b2, #7c3aed);
+            background: linear-gradient(135deg, #1E40AF, #0D9488);
         }
 
-        /* Modern Glassmorphism - Dark Theme */
+        /* Modern Glassmorphism - Biomedical Theme */
         .glass {
-            background: rgba(17, 24, 39, 0.7);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 253, 250, 0.95) 100%);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            box-shadow: 0 4px 24px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(5, 150, 105, 0.05);
         }
 
         .glass-strong {
-            background: rgba(17, 24, 39, 0.9);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(240, 253, 250, 0.98) 100%);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            box-shadow: 0 20px 60px rgba(6, 182, 212, 0.2);
+            border: 1px solid rgba(37, 99, 235, 0.25);
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15), 0 4px 12px rgba(5, 150, 105, 0.1);
         }
 
-        /* Enhanced Header - Dark Theme */
+        /* Enhanced Header - Biomedical Theme */
         .modern-header {
-            background: rgba(15, 23, 42, 0.8);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.9) 50%, rgba(240, 253, 250, 0.9) 100%);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1);
         }
 
-        /* Enhanced Sidebar - Dark Theme */
+        /* Enhanced Sidebar - Biomedical Theme */
         .enhanced-sidebar {
-            background: rgba(15, 23, 42, 0.95);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 253, 250, 0.95) 100%);
             backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(6, 182, 212, 0.2);
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+            border-right: 1px solid rgba(37, 99, 235, 0.2);
+            box-shadow: 4px 0 20px rgba(37, 99, 235, 0.08);
         }
 
-        /* Enhanced Chat Container - Dark Theme */
+        /* Enhanced Chat Container - Biomedical Theme */
         .chat-container {
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
             padding: 2rem;
-            background: rgba(3, 7, 18, 0.5);
+            background: linear-gradient(135deg, rgba(240, 249, 255, 0.6) 0%, rgba(224, 242, 254, 0.5) 50%, rgba(240, 253, 250, 0.5) 100%);
             backdrop-filter: blur(10px);
             scroll-behavior: smooth;
             min-height: 0; /* Important for flex children */
@@ -144,35 +153,35 @@
             }
         }
 
-        /* Enhanced Message Bubbles - Dark Theme */
+        /* Enhanced Message Bubbles - Biomedical Theme */
         .user-bubble {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.3);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            background: linear-gradient(135deg, #2563eb4f, var(--medical-teal));
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.25);
+            border: 1px solid rgba(37, 99, 235, 0.3);
             color: white;
         }
 
         .ai-bubble {
-            background: rgba(17, 24, 39, 0.8);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.9) 100%);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-            color: #e2e8f0;
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1);
+            color: #1E293B;
         }
 
         .ai-bubble:hover {
             transform: translateY(-1px);
-            box-shadow: 0 12px 35px rgba(6, 182, 212, 0.2);
-            border-color: rgba(6, 182, 212, 0.3);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15);
+            border-color: rgba(37, 99, 235, 0.25);
         }
 
-        /* Pondering Action Styles - Dark Theme */
+        /* Pondering Action Styles - Biomedical Theme */
         .pondering-action {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15));
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(8, 145, 178, 0.15));
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(37, 99, 235, 0.3);
             animation: ponderingPulse 2s ease-in-out infinite;
-            color: var(--neon-cyan);
+            color: var(--medical-blue);
         }
 
         @keyframes ponderingPulse {
@@ -189,13 +198,13 @@
             }
         }
 
-        /* Thinking Indicator Enhancement - Dark Theme */
+        /* Thinking Indicator Enhancement - Biomedical Theme */
         .thinking-enhanced {
-            background: rgba(17, 24, 39, 0.8);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.9) 100%);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(37, 99, 235, 0.3);
             animation: thinkingBreathe 3s ease-in-out infinite;
-            color: #e2e8f0;
+            color: #1E293B;
         }
 
         @keyframes thinkingBreathe {
@@ -219,7 +228,7 @@
         .typing-dot {
             width: 6px;
             height: 6px;
-            background: var(--neon-cyan);
+            background: var(--medical-blue);
             border-radius: 50%;
             animation: typingDot 1.4s ease-in-out infinite both;
         }
@@ -251,42 +260,42 @@
             }
         }
 
-        /* Enhanced Input Section - Dark Theme */
+        /* Enhanced Input Section - Biomedical Theme */
         .input-section {
-            background: rgba(15, 23, 42, 0.8);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.9) 50%, rgba(240, 253, 250, 0.9) 100%);
             backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(6, 182, 212, 0.2);
-            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(37, 99, 235, 0.2);
+            box-shadow: 0 -8px 32px rgba(37, 99, 235, 0.1);
         }
 
         .chat-input {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(6, 182, 212, 0.2);
+            border: 2px solid rgba(37, 99, 235, 0.2);
             transition: all 0.3s ease;
-            color: #e2e8f0;
+            color: #1E293B;
         }
 
         .chat-input::placeholder {
-            color: rgba(226, 232, 240, 0.5);
+            color: rgba(100, 116, 139, 0.6);
         }
 
         .chat-input:focus {
-            border-color: rgba(6, 182, 212, 0.6);
-            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1);
-            background: rgba(17, 24, 39, 0.9);
+            border-color: rgba(37, 99, 235, 0.5);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            background: rgba(255, 255, 255, 0.98);
         }
 
-        /* Enhanced Buttons - Dark Theme */
+        /* Enhanced Buttons - Biomedical Theme */
         .send-button {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
         }
 
         .send-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.5);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
         }
 
         .send-button:active {
@@ -294,36 +303,36 @@
         }
 
         .new-chat-btn {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(37, 99, 235, 0.3);
             transition: all 0.3s ease;
-            color: var(--neon-cyan);
+            color: var(--medical-blue);
         }
 
         .new-chat-btn:hover {
-            background: rgba(6, 182, 212, 0.15);
-            border-color: rgba(6, 182, 212, 0.5);
+            background: rgba(37, 99, 235, 0.1);
+            border-color: rgba(37, 99, 235, 0.5);
             transform: translateY(-1px);
         }
 
-        /* Suggestion Cards - Dark Theme */
+        /* Suggestion Cards - Biomedical Theme */
         .suggestion-card {
-            background: rgba(17, 24, 39, 0.7);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.9) 100%);
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(6, 182, 212, 0.25);
+            border: 2px solid rgba(37, 99, 235, 0.25);
             transition: all 0.3s ease;
             cursor: pointer;
-            color: #cbd5e1;
+            color: #475569;
             font-size: medium;
             padding: 8px;
         }
 
         .suggestion-card:hover {
             transform: translateY(-3px);
-            background: rgba(17, 24, 39, 0.9);
-            border-color: rgba(6, 182, 212, 0.5);
-            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(240, 253, 250, 0.98) 100%);
+            border-color: rgba(37, 99, 235, 0.5);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
         }
 
         /* Message Actions */
@@ -339,75 +348,75 @@
         }
 
         .action-btn {
-            background: rgba(6, 182, 212, 0.1);
+            background: rgba(37, 99, 235, 0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(6, 182, 212, 0.2);
+            border: 1px solid rgba(37, 99, 235, 0.2);
             transition: all 0.2s ease;
-            color: #94a3b8;
+            color: #64748B;
         }
 
         .action-btn:hover {
-            background: rgba(6, 182, 212, 0.2);
+            background: rgba(37, 99, 235, 0.2);
             transform: scale(1.1);
-            color: var(--neon-cyan);
+            color: var(--medical-blue);
         }
 
-        /* Markdown Content Enhancement - Dark Theme */
+        /* Markdown Content Enhancement - Biomedical Theme */
         .markdown-content {
-            color: #e2e8f0;
+            color: #1E293B;
             line-height: 1.7;
         }
 
         .markdown-content h1, .markdown-content h2, .markdown-content h3 {
-            color: #f1f5f9;
+            color: #0F172A;
         }
 
         .markdown-content code {
-            background: rgba(6, 182, 212, 0.15);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
             padding: 2px 8px;
             border-radius: 6px;
             font-size: 0.9em;
-            color: var(--neon-cyan);
+            color: var(--medical-blue);
         }
 
         .markdown-content pre {
-            background: rgba(3, 7, 18, 0.9);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(37, 99, 235, 0.2);
             border-radius: 12px;
             padding: 1.5rem;
             overflow-x: auto;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1);
         }
 
         .markdown-content pre code {
             background: transparent;
             border: none;
-            color: #e2e8f0;
+            color: #1E293B;
         }
 
-        /* Avatar Enhancement - Dark Theme */
+        /* Avatar Enhancement - Biomedical Theme */
         .ai-avatar {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-            border: 2px solid rgba(6, 182, 212, 0.3);
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
+            border: 2px solid rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
         }
 
-        /* Navigation Links - Dark Theme */
+        /* Navigation Links - Biomedical Theme */
         .nav-link {
             transition: all 0.3s ease;
             border-radius: 0.75rem;
-            color: #94a3b8;
+            color: #64748B;
         }
 
         .nav-link:hover {
-            background: rgba(6, 182, 212, 0.15);
-            color: var(--neon-cyan);
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--medical-blue);
             transform: translateX(5px);
         }
 
         .nav-link.active {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
             color: white;
         }
 
@@ -961,25 +970,25 @@
     </style>
 </head>
 
-<body class="text-slate-200" x-data="{ sidebarOpen: false }" id="main-body">
+<body class="text-slate-800" x-data="{ sidebarOpen: false }" id="main-body">
     <!-- Enhanced Sidebar -->
     <div class="enhanced-sidebar fixed top-0 left-0 h-full w-72 transform transition-transform duration-300 ease-in-out z-50"
         :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }">
         <div class="p-6">
             <div class="flex items-center mb-8">
                 <div
-                    class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center mr-3">
+                    class="w-12 h-12 bg-gradient-to-br from-blue-600 to-teal-600 rounded-xl flex items-center justify-center mr-3 shadow-md">
                     <i class="fas fa-brain text-white text-xl"></i>
                 </div>
                 <div>
-                    <h2 class="text-xl font-bold text-white">BioMed-KAI</h2>
-                    <p class="text-xs text-slate-400">Precision Medicine AI</p>
+                    <h2 class="text-xl font-bold text-slate-800">BioMed-KAI</h2>
+                    <p class="text-xs text-slate-600">Precision Medicine AI</p>
                 </div>
             </div>
             <nav>
                 <ul class="space-y-3">
                     <li><a href="home"
-                            class="nav-link flex items-center px-4 py-3 hover:text-cyan-400 transition duration-300">
+                            class="nav-link flex items-center px-4 py-3 hover:text-blue-600 transition duration-300">
                             <i class="fas fa-home mr-3"></i>Home
                         </a></li>
                     <li><a href="midas"
@@ -987,7 +996,7 @@
                             <i class="fas fa-comments mr-3"></i>Chat Interface
                         </a></li>
                     <li><a href="source"
-                            class="nav-link flex items-center px-4 py-3 hover:text-cyan-400 transition duration-300">
+                            class="nav-link flex items-center px-4 py-3 hover:text-blue-600 transition duration-300">
                             <i class="fas fa-project-diagram mr-3"></i>Knowledge Graph
                         </a></li>
                 </ul>
@@ -995,13 +1004,13 @@
         </div>
     </div>
 
-    <div class="overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-40" x-show="sidebarOpen" @click="sidebarOpen = false"></div>
+    <div class="overlay fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-40" x-show="sidebarOpen" @click="sidebarOpen = false"></div>
 
     <main class="flex-grow flex flex-col" style="height: 100vh; overflow: hidden;">
         <!-- Enhanced Header -->
         <header class="modern-header px-6 py-4 flex items-center justify-between" style="flex-shrink: 0;">
             <div class="flex items-center">
-                <button class="text-slate-400 hover:text-cyan-400 transition-colors mr-4 p-2 rounded-lg hover:bg-cyan-500/10"
+                <button class="text-slate-600 hover:text-blue-600 transition-colors mr-4 p-2 rounded-lg hover:bg-blue-50"
                     @click="sidebarOpen = !sidebarOpen">
                     <i class="fas fa-bars text-lg"></i>
                 </button>
@@ -1010,8 +1019,8 @@
                         <i class="fas fa-robot text-white"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-white">BioMed-KAI Assistant</h1>
-                        <p class="text-sm text-slate-400">Ready to help with precision medicine</p>
+                        <h1 class="text-xl font-bold text-slate-800">BioMed-KAI Assistant</h1>
+                        <p class="text-sm text-slate-600">Ready to help with precision medicine</p>
                     </div>
                 </div>
             </div>
@@ -1032,19 +1041,19 @@
                 <!-- Suggestion Cards -->
                 <div id="suggestion-section" class="suggestion-grid grid grid-cols-2 gap-4 mb-6">
                     <div class="suggestion-card rounded-xl p-4 text-sm">
-                        <i class="fas fa-microscope text-cyan-400 mr-2"></i>
+                        <i class="fas fa-microscope text-blue-600 mr-2"></i>
                         What are the latest advancements in cancer immunotherapy?
                     </div>
                     <div class="suggestion-card rounded-xl p-4 text-sm">
-                        <i class="fas fa-dna text-cyan-400 mr-2"></i>
+                        <i class="fas fa-dna text-blue-600 mr-2"></i>
                         How does pharmacogenomics influence drug efficacy?
                     </div>
                     <div class="suggestion-card rounded-xl p-4 text-sm">
-                        <i class="fas fa-chart-line text-cyan-400 mr-2"></i>
+                        <i class="fas fa-chart-line text-blue-600 mr-2"></i>
                         Can you explain the role of biomarkers in precision medicine?
                     </div>
                     <div class="suggestion-card rounded-xl p-4 text-sm">
-                        <i class="fas fa-balance-scale text-cyan-400 mr-2"></i>
+                        <i class="fas fa-balance-scale text-blue-600 mr-2"></i>
                         What are the ethical considerations in genetic testing?
                     </div>
                 </div>
@@ -1053,10 +1062,10 @@
                 <form id="chat-form" class="flex items-end gap-4">
                     <div class="flex-grow relative">
                         <textarea id="user-input" rows="1"
-                            class="chat-input w-full px-6 py-4 rounded-2xl resize-none focus-ring placeholder-slate-500"
+                            class="chat-input w-full px-6 py-4 rounded-2xl resize-none focus-ring placeholder-gray-400"
                             placeholder="Ask BioMed-KAI about precision medicine..."
                             style="min-height: 56px; max-height: 120px;"></textarea>
-                        <div class="absolute right-4 bottom-4 text-xs text-slate-500">
+                        <div class="absolute right-4 bottom-4 text-xs text-gray-500">
                             <span id="char-count">0</span>/2000
                         </div>
                     </div>
@@ -1122,7 +1131,7 @@
             // Update character count
             const count = this.value.length;
             charCount.textContent = count;
-            charCount.className = count > 1800 ? 'text-red-400' : count > 1500 ? 'text-yellow-400' : 'text-slate-500';
+            charCount.className = count > 1800 ? 'text-red-600' : count > 1500 ? 'text-yellow-600' : 'text-gray-500';
         });
 
         // Add initial welcome message (no metadata, so no insights button)
@@ -1167,7 +1176,7 @@
             userInput.value = '';
             userInput.style.height = 'auto';
             charCount.textContent = '0';
-            charCount.className = 'text-slate-500';
+            charCount.className = 'text-gray-500';
 
             streamResponse(message);
         }
@@ -1768,7 +1777,7 @@
             avatarDiv.innerHTML = '<i class="fas fa-robot text-white text-sm"></i>';
 
             const messageText = document.createElement('span');
-            messageText.className = 'mr-4 text-slate-400 text-sm';
+            messageText.className = 'mr-4 text-gray-600 text-sm';
             messageText.textContent = messages[messageIndex];
 
             const dotsContainer = document.createElement('div');
@@ -1812,9 +1821,9 @@
             container.className = 'max-w-4xl mr-12';
 
             const errorContainer = document.createElement('div');
-            errorContainer.className = 'bg-red-900/30 border border-red-500/50 text-red-400 rounded-2xl px-6 py-4 shadow-lg flex items-center';
+            errorContainer.className = 'bg-red-50 border border-red-300 text-red-700 rounded-2xl px-6 py-4 shadow-md flex items-center';
             errorContainer.innerHTML = `
-                <i class="fas fa-exclamation-triangle text-red-400 mr-3"></i>
+                <i class="fas fa-exclamation-triangle text-red-600 mr-3"></i>
                 <span>${message}</span>
             `;
 
@@ -1903,7 +1912,7 @@
                 userInput.value = '';
                 userInput.style.height = 'auto';
                 charCount.textContent = '0';
-                charCount.className = 'text-slate-500';
+                charCount.className = 'text-gray-500';
             }
         });
 
